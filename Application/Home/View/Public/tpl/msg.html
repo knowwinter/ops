@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<include file="Application/Admin/View/Public/tpl/header.html" />
+	
+	<body>
+
+			
+					
+				<div class="container-fluid content">
+			
+					<div class="row">		
+						<div id="content" class="col-sm-12 full">				
+							<div class="row box-error">					
+								<div class="col-lg-12 col-md-12 col-xs-12">
+									<div class="text-center">
+										<?php if(isset($message)) {?>
+										<h1>:)</h1>
+										<p class="success"><?php echo($message); ?></p>
+		 								<?php }else{?>
+										<h1>:(</h1>
+										<p class="error"><?php echo($error); ?></p>
+										<?php }?>
+										<p class="detail"></p>
+										<p class="jump">
+											页面自动 <a id="href" href="<?php echo($jumpUrl); ?>">跳转</a> 等待时间： <b id="wait"><?php echo($waitSecond); ?></b>
+										</p>
+										<a href="javascript: history.go(-1)">
+											<button type="button" class="btn btn-danger"><i class="fa fa-chevron-left"></i> Go Back</button>
+										</a>
+										<!--<a href="page-login.html">
+											<button type="button" class="btn btn-danger"><i class="fa fa-lock"></i> Login</button>
+										</a>
+										<a href="page-profile.html">
+											<button type="button" class="btn btn-danger"><i class="fa fa-envelope"></i> Contact Admin</button>
+										</a>
+										-->
+									</div>						
+								</div>					
+							</div>			
+						</div>
+				
+					</div>
+				<!-- End Main Page -->	
+			</div>
+
+		
+	
+		
+		
+		<include file="Application/Admin/View/Public/tpl/js.html" />
+<script type="text/javascript">
+	(function(){
+		var wait = document.getElementById('wait'),href = document.getElementById('href').href;
+		var interval = setInterval(function(){
+			var time = --wait.innerHTML;
+			if(time <= 0) {
+				location.href = href;
+				clearInterval(interval);
+			};
+		}, 1000);
+	})();
+</script>
+		
+	</body>
+	
+</html>

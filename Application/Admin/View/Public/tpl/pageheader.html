@@ -1,0 +1,35 @@
+	<!-- Main Page -->
+				<div class="main ">
+					<!-- Page Header -->
+					<div class="page-header">
+						<div class="pull-left">
+							<ol class="breadcrumb visible-sm visible-md visible-lg">								
+								<li><a href="{:U('Admin/Index/index')}"><i class="icon fa fa-home"></i>首页</a></li>
+								<if condition="$level2 == ''">
+									<li class="active"><i class="fa fa-list-alt"></i>{$level1}</li>
+									</ol>						
+									</div>
+									<div class="pull-right">
+										<h2>{$level1}</h2>
+									</div>	
+								<elseif condition="$level3 == ''"/>
+									<li><a href="#"><i class="fa fa-list-alt"></i>{$level1}</a></li>
+									<li class="active"><i class="fa fa-list-alt"></i>{$level2}</li>
+									</ol>						
+									</div>
+									<div class="pull-right">
+										<h2>{$level2}</h2>
+									</div>	
+								<else />
+									<li><a href="#"><i class="fa fa-list-alt"></i>{$level1}</a></li>
+									<li><a href="#"><i class="fa fa-list-alt"></i>{$level2}</a></li>
+									<li class="active"><i class="fa fa-list-alt"></i>{$level3}</li>
+									</ol>						
+									</div>
+									<div class="pull-right">
+										<h2>{$level3}</h2>
+									</div>	
+								</if>
+										
+					</div>
+					<!-- End Page Header -->			

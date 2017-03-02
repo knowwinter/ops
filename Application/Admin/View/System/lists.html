@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<include file="Application/Admin/View/Public/tpl/header.html" />
+	
+	<body>
+
+				<include file="Application/Admin/View/Public/tpl/navbar.html" />
+				<include file="Application/Admin/View/Public/tpl/sidebar.html" />
+				<include file="Application/Admin/View/Public/tpl/pageheader.html" />
+					
+					
+					<div class="row">		
+						<div class="col-lg-12">
+							<div class="panel">
+								<div class="panel-heading bk-bg-primary">
+									<h6><i class="fa fa-table red"></i><span class="break"></span>系统列表</h6>
+									<!-- <div class="panel-actions">
+										<a href="table.html#" class="btn-setting"><i class="fa fa-rotate-right"></i></a>
+										<a href="table.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
+										<a href="table.html#" class="btn-close"><i class="fa fa-times"></i></a>
+									</div> -->
+								</div>
+								<div class="panel-body">
+									<a href="{:U('Admin/System/addSystem')}" class="bk-margin-5 btn btn-success">添加系统</a>
+									<span id='delSystems' class="bk-margin-5 btn btn-danger">删除所选</span>
+								 <form id="search_form" method="get" action="{:U('Admin/System/lists')}" class="pull-right mail-search">
+								 		<div class="input-group">
+													<input type="text" id="search_input" name="keyword" class="form-control" placeholder="关键字" value="{$keyword}"/>
+													<span class="input-group-btn">
+													<button type="submit" class="btn btn-success">Search</button>
+													</span>
+										</div>
+
+								 </form>
+									<div class="table-responsive">	
+										<table class="table table-striped table-bordered bootstrap-datatable datatable">
+											<thead>
+												<tr>
+													<th width="3%">
+														<div class="checkbox-custom checkbox-default" id='divsall'>
+															<input type="checkbox"  id="check_all" onclick="checkAll('check_all', 'divsall', 'checked[]','divs')" />
+															<label for="check_all"></label>
+														</div>
+														
+													</th>
+													
+													<th>系统名称</th>
+													<th width="8%">当前版本</th>
+													<th>所属项目</th>
+													<th>系统OWNER</th>
+													<th>部署规则</th>
+													<th>部署包名</th>
+													<th>部署路径</th>
+													<th>依赖服务</th>
+													<th>系统状态</th>
+													<th>创建时间</th>
+													<th width="10%">操作</th>
+												</tr>
+											</thead>  
+											<form id="delSystemsForm" action="{:U('Admin/System/delSystems')}" method="post" accept-charset="utf-8"> 
+											<tbody>
+												<volist name='systemlist' id='data' key='j'>								
+												<tr>
+												<if condition="$data.system_name neq '默认系统'" >
+													<td width="3%">
+														<div class="checkbox-custom checkbox-default" name='divs' id='ck{$j}'>
+															<input type="checkbox" id='checkbox{$j}' name="checked[]" onclick="checkOne('checkbox{$j}','ck{$j}')" value='{$data.system_id}'/>
+															<label for="checkbox{$j}"></label>
+														</div>
+													</td>
+													<else/>
+													<td></td>
+												</if>
+													<td>{$data.system_name}</td>
+													<td>{$data.current_version}</td>
+													<td>{$data.project.project_name}</td>
+													<td>{$data.user.name}</td>
+													<td>{$data.deploy_rule.rule_name}</td>
+													<td>{$data.pkg_name}</td>
+													<td>{$data.deploy_path}</td>
+													<td>{$data.service.service_name}</td>
+													<switch name="data.status">
+														<case value='0'>
+															<td>
+																<span class="label label-default">未运营</span>
+															</td>
+														</case>
+														<case value='1'>
+															<td>
+																<span class="label label-success">已运营</span>
+															</td>
+														</case>
+														<case value='2'>
+															<td>
+																<span class="label label-danger">已下线</span>
+															</td>
+														</case>
+													</switch>
+													<td>{$data.create_time}</td>
+													
+													<td>
+														
+														<button title="查看系统详情" data-rel="tooltip" type="button" class="btn btn-success" data-toggle="modal" data-target="#system{$data['system_id']}"><i  class="fa fa-search-plus "></i> </button>
+														<a title="编辑系统" data-rel="tooltip" class="btn btn-info" href="{:U('Admin/System/editSystem',array('system_id' => $data['system_id']))}">
+															<i class="fa fa-edit "></i>                                            
+														</a>
+
+														<if condition="$data.system_name neq '默认系统'">
+															<a title="删除系统" data-rel="tooltip" class="btn btn-danger" href="{:U('Admin/System/delSystem',array('system_id' => $data['system_id']))}" onclick="if(confirm('删除系统将删除所有相关服务器主机、重置相关用户所属系统，确认删除？') == false) return false;">
+																<i class="fa fa-trash-o "></i> 
+
+															</a>
+														</if>
+													</td>
+												</tr>
+
+												<div class="row profile modal fade" id="system{$data['system_id']}" aria-labelledby="myModalLabel" aria-hidden="true">
+
+												<div class="modal-dialog">
+												    <div class="modal-content">
+												       <div class="modal-header">
+												            <button type="button" class="close" 
+												               data-dismiss="modal" aria-hidden="true">
+												                  &times;
+												            </button>
+												            <h4 class="modal-title" id="myModalLabel" align="center">
+												               系统详情
+												            </h4>
+												       </div>
+
+													 <div class="modal-body">
+														
+															<div class="panel">
+																<div class="panel-body">
+																	<div class="text-left bk-bg-white bk-padding-top-40 bk-padding-bottom-10">
+																		<div class="row">
+																			
+																			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-left bk-vcenter text-center">
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>系统ID：{$data.system_id}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>系统名称：{$data.system_name}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>系统描述：{$data.system_desc}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>系统OWNER：{$data.user.name}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>所属项目：{$data.project.project_name}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>部署规则：{$data.deploy_rule.rule_name}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>部署包名：{$data.pkg_name}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>部署路径：{$data.deploy_path}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>备份路径：{$data.backup_path}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>依赖服务：{$data.service.service_name}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>部署主机：<volist name="data['host']" id="host">{$host['host_name']}-{$host['ipaddr']}&nbsp;&nbsp;</volist></small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>当前版本：{$data.current_version}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>当前版本发布时间：{$data.current_release_time|date='Y-m-d H:i:s',###}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>上一个版本：{$data.previous_version}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>上一个版本发布时间：{$data.previous_release_time|date='Y-m-d H:i:s',###}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>系统创建时间：{$data.create_time}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>系统状态：
+																				<switch name="data.status">
+																					<case value='0'>
+																						
+																							<span class="label label-default">未运营</span>
+																						
+																					</case>
+																					<case value='1'>
+																						
+																							<span class="label label-success">已运营</span>
+																						
+																					</case>
+																					<case value='2'>
+																						
+																							<span class="label label-danger">已下线</span>
+																						
+																					</case>
+																				</switch></small></h4>
+																				
+																			</div>
+																		</div>
+																	</div>
+																	
+																										
+																</div>
+															</div>							
+														
+													</div>
+												<div class="modal-footer" >
+													<div align="center">
+														<button type="button" class="btn btn-primary" 
+										               data-dismiss="modal">关闭
+										            </button>
+													</div>
+										            
+										            <!-- <button type="button" class="btn btn-primary">
+										               提交更改
+										            </button> -->
+										         </div>
+												</div>
+											</div>
+										</div>
+												</volist>
+											</tbody>
+										</form>
+										</table>
+									</div>
+
+									<div class="btn-toolbar" role="toolbar">
+										{$page}
+									</div>
+								</div>
+								
+							</div>
+						</div>					
+					</div>
+				<!-- End Main Page -->	
+		
+		<include file="Application/Admin/View/Public/tpl/usage.html" />
+		
+		
+		<!-- Modal Dialog -->
+		<!-- <div class="modal fade" id="myModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title bk-fg-primary">Modal title</h4>
+					</div>
+					<div class="modal-body">
+						<p class="bk-fg-danger">Here settings can be configured...</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div><!-- End Modal Dialog --> -->
+
+		<!-- Finish Button -->
+		<!-- <div class="modal fade" id="finish-button">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title bk-fg-primary text-center">You successfully submit this form.</h4>
+					</div>
+				</div>
+			</div>
+		</div><!-- End Finish Button -->	 -->
+		
+		<div class="clearfix"></div>		
+		
+		
+		<include file="Application/Admin/View/Public/tpl/js.html" />
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+
+				$("#delSystems").click(function(){
+					if(confirm('删除系统将删除所有相关服务器主机、重置相关用户所属系统，确认删除？')) {
+						document.getElementById("delSystemsForm").submit();
+					}
+				});
+
+			});
+
+		</script>
+		
+	</body>
+	
+</html>

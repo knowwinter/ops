@@ -1,0 +1,7 @@
+- hosts: "{{host}}"
+  remote_user: "{{user}}"
+  gather_facts: "{{gather}}"
+  become: yes
+  tasks:
+  - name: "{{action}} {{service}}" 
+    service: name={{service}} pattern={{service_home}} state={{action}}

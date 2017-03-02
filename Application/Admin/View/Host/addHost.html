@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<include file="Application/Admin/View/Public/tpl/header.html" />
+	
+	<body>
+
+				<include file="Application/Admin/View/Public/tpl/navbar.html" />
+				<include file="Application/Admin/View/Public/tpl/sidebar.html" />
+				<include file="Application/Admin/View/Public/tpl/pageheader.html" />
+					
+					
+					<div class="row">	
+					<div class="col-md-3">
+					</div>	
+						<div class="col-md-6">
+							<div class="panel">
+								<div class="panel-heading bk-bg-primary">
+									<h6><i class="fa fa-indent red"></i>添加主机</h6>							
+								</div>
+								<div class="panel-body">
+									<form action="{:U('Admin/Host/addHost')}" method="post" enctype="multipart/form-data" class="form-horizontal ">
+									
+										
+										<div class="form-group">
+											<label class="col-md-3 control-label" for="host_name">主机名</label>
+											<div class="col-md-6">
+												<input type="text" id="host_name" name="host_name" class="form-control" placeholder="主机名">
+												<span class="help-block">请输入主机名</span>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label" for="ipaddr">IP地址</label>
+											<div class="col-md-6">
+												<input type="text" id="ipaddr" name="ipaddr" class="form-control" placeholder="192.168.20.3">
+												<span class="help-block">请输入主机IP地址</span>
+											</div>
+										</div>
+	
+										<div class="form-group">
+											<label class="col-md-3 control-label" for="dns">内部域名</label>
+											<div class="col-md-6">
+												<input type="text" id="dns" name="dns" class="form-control" placeholder="xlnode.xianglin.localdomain">
+												<span class="help-block">请输入主机内部域名</span>
+											</div>
+										</div>
+
+										<div id="sys_div" class="form-group">
+											<label class="col-md-3 control-label" for="system">所属系统</label>
+											<div class="col-md-6">
+												<select id="system_id" name="system_id[]" class="form-control" size="1">
+													<option value="0">请选择所属系统</option>
+													<volist name="system" id="data">
+														<option value="{$data.system_id}" {$data[system_name] == '默认系统' ? 'selected' : "" }>{$data.system_name}</option>
+													</volist>
+												</select>
+											</div>
+											<div id="sys_divm3" class="col-md-3">
+												<button type="button" class="btn btn-success add-system">添加一个系统</button>
+											</div>
+										</div>
+										
+
+										<div id="env" class="form-group">
+											<label class="col-md-3 control-label" for="env">所属环境</label>
+											<div class="col-md-6">
+												<select id="env_id" name="env_id" class="form-control" size="1">
+													<option value="0">请选择所属环境</option>
+													<volist name="env" id="data">
+														<option value="{$data.env_id}">{$data.env_name}</option>
+													</volist>
+												</select>
+											</div>
+										</div>
+										<div id="service_div" class="form-group">
+											<label class="col-md-3 control-label" for="service">运行服务</label>
+											<div class="col-md-6">
+												<select id="service_id" name="service_id[]" class="form-control" size="1">
+													<option value="0">请选择服务</option>
+													<volist name="service" id="data">
+														<option value="{$data.service_id}">{$data.service_name}</option>
+													</volist>
+												</select>
+											</div>
+											<div id="service_divm3" class="col-md-3">
+												<button type="button" class="btn btn-success add-service">添加一个服务</button>
+											</div>
+										</div>
+										
+										<div id="status" class="form-group">
+											<label class="col-md-3 control-label">主机状态</label>
+											<div class="col-md-9">
+												<div class="radio-custom radio-inline">
+													<input type="radio" id="status_radio1" name="status" value="1" checked="checked"> 
+													<label for="status_radio1"> 运行中</label>
+												</div>
+												<div class="radio-custom radio-inline">
+													<input type="radio" id="status_radio2" name="status" value="0"> 
+													<label for="status_radio2"> 已关闭</label>
+												</div>
+												
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label" for="host_desc">主机描述</label>
+											<div class="col-md-6">
+												<textarea id="host_desc" name="host_desc"  class="form-control" placeholder="主机描述"></textarea>
+												<span class="help-block">请输入主机描述</span>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="col-md-4">
+											</div>
+											<div class="col-md-4">
+
+											<!-- 	<input type="hidden" id="pid" name="pid" class="form-control" value='{$pid}'>
+												<input type="hidden" id="level" name="level" class="form-control" value='{$level}'> -->
+											
+												<button type="submit" class="btn btn-success">添加主机</button>
+												</div>
+											<div class="col-md-4">
+											</div>
+										</div>
+										
+										<br>
+									</form>
+								</div>	
+							</div>	
+						</div>	
+						<div class="col-md-3">
+					</div>				
+					</div>
+				<!-- End Main Page -->	
+		
+		<include file="Application/Admin/View/Public/tpl/usage.html" />
+		
+		
+		<!-- Modal Dialog -->
+		<!-- <div class="modal fade" id="myModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title bk-fg-primary">Modal title</h4>
+					</div>
+					<div class="modal-body">
+						<p class="bk-fg-danger">Here settings can be configured...</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div><!-- End Modal Dialog --> -->
+
+		<!-- Finish Button -->
+		<!-- <div class="modal fade" id="finish-button">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title bk-fg-primary text-center">You successfully submit this form.</h4>
+					</div>
+				</div>
+			</div>
+		</div><!-- End Finish Button -->	 -->
+		
+		<div class="clearfix"></div>		
+		
+		
+		<include file="Application/Admin/View/Public/tpl/js.html" />
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+
+				$('.add-service').click(function(){
+					var obj = $(this).parents('#service_div').clone();
+					obj.find('.add-service').remove();
+					obj.find('#service_divm3').append("<button type='button' class='btn-close service-close'><i class='fa fa-times'></i></button>");
+					$('#status').before(obj);
+				});
+
+				$('.service-close').live('click',function(){
+					
+					$(this).parents('#service_div').remove();
+				});
+
+				$('.add-system').click(function(){
+					var obj = $(this).parents('#sys_div').clone();
+					obj.find('.add-system').remove();
+					obj.find('#sys_divm3').append("<button type='button' class='btn-close system-close'><i class='fa fa-times'></i></button>");
+					$('#env').before(obj);
+				});
+
+				$('.system-close').live('click',function(){
+					
+					$(this).parents('#sys_div').remove();
+				});
+
+			});
+
+		</script>
+		
+	</body>
+	
+</html>

@@ -1,0 +1,7 @@
+# 忽略文件
+Runtime
+Uploads
+warFiles
+.htaccess
+.svn
+

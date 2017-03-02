@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<include file="Application/Admin/View/Public/tpl/header.html" />
+	
+	<body>
+
+				<!-- Start: Content -->
+		<div class="container-fluid content body">
+			<div class="row">
+				<!-- Main Page -->
+				<div class="body-login">
+					<div class="center-login">
+						<div class="logo pull-left hidden-xs">
+							<img src="__PUBLIC__/assets/img/logo.png" height="45" alt="乡邻云-运维自动化平台" />
+							<img src="__PUBLIC__/assets/img/icon2.png" height="45" alt="乡邻云-运维自动化平台" />
+						</div>
+
+						<div class="panel panel-login">
+							<div class="panel-title-login text-right">
+								<h2 class="title"><i class="fa fa-user"></i> 登录</h2>
+							</div>
+							<div class="panel-body">
+								<form action="{:U('Admin/Login/login')}" method="post">
+									<div class="form-group">
+										<label>登录名</label>
+										<div class="input-group input-group-icon">
+											<input name="login_name" type="text" class="form-control bk-noradius" />
+											<span class="input-group-addon">
+												<span class="icon">
+													<i class="fa fa-user"></i>
+												</span>
+											</span>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label>密码</label>									
+										<div class="input-group input-group-icon">
+											<input name="password" type="password" class="form-control bk-noradius" />
+											<span class="input-group-addon">
+												<span class="icon">
+													<i class="fa fa-lock"></i>
+												</span>
+											</span>
+										</div>
+									</div>
+									<div class="form-group">
+										<label>验证码</label>
+										<div class="input-group input-group-icon">
+											<input name="verify" type="text" class="form-control bk-noradius" />
+											<span class="input-group-addon">
+												<span class="icon">
+													<i class="fa fa-barcode"></i>
+												</span>
+											</span>
+										</div>
+										<br />
+												
+										<img id='captcha_img' width="30%" class="left15" height="50" alt="验证码" src="{:U('Admin/Login/verify','','')}" title="点击刷新"> 
+
+												
+										
+									</div>
+									<br />
+									<div class="row">
+										<div class="col-sm-8">
+											<div class="checkbox-custom checkbox-default bk-margin-bottom-10">
+												<input id="RememberMe" name="rememberme" type="checkbox"/>
+												<label for="RememberMe">记住我</label>
+											</div>
+										</div>
+										<div class="col-sm-4 text-right">
+											<button href="index.html" type="submit" class="btn btn-primary hidden-xs">登录</button>
+											<button href="index.html" type="submit" class="btn btn-primary btn-block btn-lg visible-xs bk-margin-top-10">登录</button>
+										</div>
+									</div>
+									<br />
+									
+									<p class="text-center">Don't have an account yet? <a href="page-register.html"><small>Register!</small></a>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- End Main Page -->
+		
+				
+		
+			</div>
+		</div><!--/container-->
+
+		
+		
+		<include file="Application/Admin/View/Public/tpl/js.html" />
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+
+				var captcha_img = $('#captcha_img')  
+				var verifyimg = captcha_img.attr("src");  
+				captcha_img.attr('title', '点击刷新');  
+				captcha_img.click(function(){ 
+					
+					$(this).attr("src", verifyimg +'/'+Math.random());  
+				    
+				});  
+			});
+
+		</script>
+		
+	</body>
+	
+</html>

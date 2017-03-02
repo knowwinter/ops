@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<include file="Application/Admin/View/Public/tpl/header.html" />
+	
+	<body>
+
+				<include file="Application/Admin/View/Public/tpl/navbar.html" />
+				<include file="Application/Admin/View/Public/tpl/sidebar.html" />
+				<include file="Application/Admin/View/Public/tpl/pageheader.html" />
+					
+					
+					<div class="row">		
+						<div class="col-lg-12">
+							<div class="panel">
+								<div class="panel-heading bk-bg-primary">
+									<h6><i class="fa fa-table red"></i><span class="break"></span>用户列表</h6>
+									<!-- <div class="panel-actions">
+										<a href="table.html#" class="btn-setting"><i class="fa fa-rotate-right"></i></a>
+										<a href="table.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
+										<a href="table.html#" class="btn-close"><i class="fa fa-times"></i></a>
+									</div> -->
+								</div>
+								<div class="panel-body">
+									<a href="{:U('Admin/User/addUser')}" class="bk-margin-5 btn btn-success">添加用户</a>
+									<span id='delUsers' class="bk-margin-5 btn btn-danger">删除所选</span>
+								 <form id="search_form" method="get" action="{:U('Admin/User/lists')}" class="pull-right mail-search">
+								 		<div class="input-group">
+													<input type="text" id="search_input" name="keyword" class="form-control" placeholder="关键字" value="{$keyword}"/>
+													<span class="input-group-btn">
+													<button type="submit" class="btn btn-success">Search</button>
+													</span>
+										</div>
+
+								 </form>
+									<div class="table-responsive">	
+										<table class="table table-striped table-bordered bootstrap-datatable datatable">
+											<thead>
+												<tr>
+													<th width="3%">
+														<div class="checkbox-custom checkbox-default" id='divsall'>
+															<input type="checkbox"  id="check_all" onclick="checkAll('check_all', 'divsall', 'checked[]','divs')" />
+															<label for="check_all"></label>
+														</div>
+														
+													</th>
+													<th>登录名</th>
+													<th>用户别名</th>
+													<th>用户权限组</th>
+													<th>项目组</th>
+													<th>所属系统</th>
+													<th>状态</th>
+													<th>是否在线</th>
+													<th>最后登录时间</th>
+													<th>登录IP</th>
+													<th>操作</th>
+												</tr>
+											</thead>  
+											<form id="delUsersForm" action="{:U('Admin/User/delUsers')}" method="post" accept-charset="utf-8"> 
+											<tbody>
+												<volist name='userlist' id='data' key='j'>								
+												<tr>
+												<if condition="$data.login_name neq 'superadmin'">
+													<td width="3%">
+														<div class="checkbox-custom checkbox-default" name='divs' id='ck{$j}'>
+															<input type="checkbox" id='checkbox{$j}' name="checked[]" onclick="checkOne('checkbox{$j}','ck{$j}')" value='{$data.user_id}'/>
+															<label for="checkbox{$j}"></label>
+														</div>
+													</td>
+													<else/>
+													<td></td>
+												</if>
+													<td>{$data.login_name}</td>
+													<td>{$data.name}</td>
+													<td><volist name="data['role']" id="role">{$role['name']}({$role['remark']})<br /></volist></td>
+													<td>{$data.project.project_name}</td>
+													<td>{$data.system.system_name}</td>
+													
+													<switch name="data.status">
+														<case value='0'>
+															<td>
+																<span class="label label-default">禁用</span>
+															</td>
+														</case>
+														<case value='1'>
+															<td>
+																<span class="label label-success">启用</span>
+															</td>
+														</case>
+														<case value='2'>
+															<td>
+																<span class="label label-danger">删除</span>
+															</td>
+														</case>
+													</switch>
+
+													<switch name="data.is_online">
+														<case value='0'>
+															<td>
+																<span class="label label-default">离线</span>
+															</td>
+														</case>
+														<case value='1'>
+															<td>
+																<span class="label label-success">在线</span>
+															</td>
+														</case>
+													</switch>
+													
+
+													<td>{$data.last_login|date='Y-m-d h:i:s',###}</td>
+													<td>{$data.login_ip}</td>
+													<td>
+														<!-- <a title="查看用户" id="profile-a" data-rel="tooltip" data-toggle="modal"  class="btn btn-success" href="{:U('Admin/User/profile',array('user_id' => $data['user_id']))}">
+															<i class="fa fa-search-plus "></i>                                            
+														</a> -->
+														<button title="查看用户" data-rel="tooltip" type="button" class="btn btn-success" data-toggle="modal" data-target="#profile{$data['user_id']}"><i  class="fa fa-search-plus "></i> </button>
+														<a title="编辑用户" data-rel="tooltip" class="btn btn-info" href="{:U('Admin/User/editUser',array('user_id' => $data['user_id']))}">
+															<i class="fa fa-edit "></i>                                            
+														</a>
+														<if condition="$data.login_name neq 'superadmin'">
+															<a title="删除用户" data-rel="tooltip" class="btn btn-danger" href="{:U('Admin/User/delUser',array('user_id' => $data['user_id']))}" onclick="if(confirm('删除用户将重置相关项目架构师和系统owner，确认删除？') == false) return false;">
+																<i class="fa fa-trash-o "></i> 
+
+															</a>
+														</if>
+													</td>
+												</tr>
+
+												<div class="row profile modal fade" id="profile{$data['user_id']}" aria-labelledby="myModalLabel" aria-hidden="true">
+
+												<div class="modal-dialog">
+												    <div class="modal-content">
+												       <div class="modal-header">
+												            <button type="button" class="close" 
+												               data-dismiss="modal" aria-hidden="true">
+												                  &times;
+												            </button>
+												            <h4 class="modal-title" id="myModalLabel" align="center">
+												               查看用户
+												            </h4>
+												       </div>
+
+													 <div class="modal-body">
+														
+															<div class="panel">
+																<div class="panel-body">
+																	<div class="text-left bk-bg-white bk-padding-top-40 bk-padding-bottom-10">
+																		<div class="row">
+																			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bk-vcenter text-center">                                
+																				<div class="bk-avatar">
+																					<img src="__PUBLIC__/{$data['avatar']}" alt="" class="img-circle bk-img-120 bk-border-light-gray bk-border-3x" />
+																				</div>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300">ID: {$data['user_id']}</h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300">
+
+																				<switch name="data.gender">
+																					<case value="0"><i class="fa fa-question "></i> </case>
+																					<case value="1"><i class="fa fa-male "></i> </case>
+																					<case value="2"><i class="fa fa-female "></i> </case>
+																				</switch>
+
+																				{$data['name']}</h4>
+																			</div>
+																			
+																			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-left bk-vcenter text-center">
+																				<hr class="bk-margin-off" />
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300" align="left">用户信息</h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>登录名：{$data.login_name}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>用户组：<volist name="data['role']" id="role">{$role['name']}({$role['remark']})&nbsp;&nbsp;</volist></small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>用户状态：
+																				<switch name="data.status">
+																					<case value='0'>
+																						
+																							<span class="label label-default">禁用</span>
+																						
+																					</case>
+																					<case value='1'>
+																						
+																							<span class="label label-success">启用</span>
+																						
+																					</case>
+																					<case value='2'>
+																						
+																							<span class="label label-danger">删除</span>
+																						
+																					</case>
+																				</switch></small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>是否在线：
+																					<switch name="data.is_online">
+																						<case value='0'>
+																							
+																								<span class="label label-default">离线</span>
+																							
+																						</case>
+																						<case value='1'>
+																							
+																								<span class="label label-success">在线</span>
+																							
+																						</case>
+																					</switch>
+																				</small>
+																				</h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>创建时间：{$data.create_time}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>最后登录：{$data.last_login|date='Y-m-d H:i:s',###}</small></h4>
+																				<h4 class="bk-margin-top-10 bk-docs-font-weight-300 bk-padding-left-20" align="left"><small>登录IP：{$data.login_ip}</small></h4>
+																			</div>
+																		</div>
+																	</div>
+																	<hr class="bk-margin-off" />
+																	<div class="bk-ltr bk-bg-white">
+																		<div class="row">
+																			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+																				<div class="bk-widget bk-border-off bk-webkit-fix">
+																					<div class="bk-bg-white text-center bk-padding-top-20 bk-padding-bottom-10">
+																						<div class="row">
+																							<div class="text-left bk-padding-left-10">
+																								<h4 class="bk-margin-off">其他信息</h4>
+																							</div>                            
+																						</div>
+																					</div> 
+																					<div class="bs-example">
+																						<div id="carousel-example-generic{$data['user_id']}" class="carousel bk-carousel-fade slide" data-ride="carousel">
+																							<div class="carousel-inner">
+																								<div class="item active" >
+																									<a class="panel-body bk-bg-white bk-bg-lighten bk-padding-off-top bk-padding-off-bottom">
+																										<div class="pull-left bk-margin-top-10 bk-margin-right-10">
+																											<div class="bk-round bk-bg-darken bk-border-off bk-icon bk-icon-default bk-bg-primary">
+																												<i class="fa fa-book"></i>
+																											</div>
+																										</div>
+																										<h5 class="bk-fg-primary bk-fg-darken bk-margin-off-bottom">所属系统</h5>
+																										<p>
+																											<small>{$data.system.system_name}</small>
+																										</p>
+																									</a>                                   
+																								</div>
+																								<div class="item">
+																									<a class="panel-body bk-bg-white bk-bg-lighten bk-padding-off-top bk-padding-off-bottom">
+																										<div class="pull-left bk-margin-top-10 bk-margin-right-10">
+																											<div class="bk-round bk-bg-darken bk-border-off bk-icon bk-icon-default bk-bg-info">
+																												<i class="fa fa-building-o"></i>
+																											</div>
+																										</div>
+																										<h5 class="bk-fg-info bk-fg-darken bk-margin-off-bottom">所属项目</h5>
+																										<p>
+																											<small>{$data.project.project_name}</small>
+																										</p>
+																									</a>                                    
+																								</div>    
+																								<div class="item">
+																									<a class="panel-body bk-bg-white bk-bg-lighten bk-padding-off-top bk-padding-off-bottom">
+																										<div class="pull-left bk-margin-top-10 bk-margin-right-10">
+																											<div class="bk-round bk-bg-darken bk-border-off bk-icon bk-icon-default bk-bg-warning">
+																												<i class="fa fa-thumbs-up"></i>
+																											</div>
+																										</div>
+																										<h5 class="bk-fg-info bk-fg-darken bk-margin-off-bottom">用户描述</h5>
+																										<p>
+																											<small>
+																											<empty name="$data.user_desc">
+																												这个家伙忙着修BUG，什么都没留下
+																											<else />
+																												{$data.user_desc}
+																											</empty>
+																											</small>
+																										</p>
+																									</a>                                    
+																								</div>                                  
+																							</div>
+																							<a class="left carousel-control bk-carousel-control bk-carousel-control-white bk-carousel-hide-init" href="#carousel-example-generic{$data['user_id']}" role="button" data-slide="prev">
+																								<span class="fa fa-angle-left icon-prev bk-bg-very-light-gray"></span>
+																							</a>
+																							<a class="right carousel-control bk-carousel-control bk-carousel-control-white bk-carousel-hide-init" href="#carousel-example-generic{$data['user_id']}" role="button" data-slide="next">
+																								<span class="fa fa-angle-right icon-next"></span>
+																							</a>
+																						</div>
+																					</div>																				
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<hr class="bk-margin-off" />
+																	<div class="bk-ltr bk-bg-white">
+																		<div class="row">
+																			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+																				<div class="bk-bg-white text-center bk-padding-top-20 bk-padding-bottom-10">
+																					<div class="row">
+																						<div class="text-left bk-padding-left-10">
+																							<h4 class="bk-margin-off">联系方式</h4>
+																						</div>                            
+																					</div>
+																				</div> 
+																			</div>																	
+																		</div>
+																	</div>
+																	<div class="bk-ltr bk-padding-bottom-20 bk-padding-left-20">
+																		<div class="row">
+																			<if condition="$data['mobile'] gt 0">
+																				<div class="col-12-4 col-md-12 col-sm-12 col-xs-12 bk-bg-white bk-padding-top-10">
+																					<i class="fa fa-phone"></i> {$data.mobile}
+																				</div>
+																			</if>
+																			<!-- <div class="col-12-4 col-md-12 col-sm-12 col-xs-12 bk-bg-white bk-padding-top-10">
+																				<i class="fa fa-tablet"></i> +62 2569 2568 256
+																			</div> -->
+																			<div class="col-12-4 col-md-12 col-sm-12 col-xs-12 bk-bg-white bk-padding-top-10">
+																				<i class="fa fa-envelope"></i> {$data.email}
+																			</div>
+																		</div>
+																	</div>									
+																</div>
+															</div>							
+														
+													</div>
+												<div class="modal-footer" >
+													<div align="center">
+														<button type="button" class="btn btn-primary" 
+										               data-dismiss="modal">关闭
+										            </button>
+													</div>
+										            
+										            <!-- <button type="button" class="btn btn-primary">
+										               提交更改
+										            </button> -->
+										         </div>
+												</div>
+											</div>
+												</div>
+
+
+
+
+												</volist>
+											</tbody>
+										</form>
+										</table>
+									</div>
+
+									<div class="btn-toolbar" role="toolbar">
+										{$page}
+									</div>
+								</div>
+								
+							</div>
+						</div>					
+					</div>
+				<!-- End Main Page -->	
+		
+		<include file="Application/Admin/View/Public/tpl/usage.html" />
+		
+		
+		<!-- Modal Dialog -->
+		<!-- <div class="modal fade" id="myModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title bk-fg-primary">Modal title</h4>
+					</div>
+					<div class="modal-body">
+						<p class="bk-fg-danger">Here settings can be configured...</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div><!-- End Modal Dialog --> -->
+
+		<!-- Finish Button -->
+		<!-- <div class="modal fade" id="finish-button">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title bk-fg-primary text-center">You successfully submit this form.</h4>
+					</div>
+				</div>
+			</div>
+		</div><!-- End Finish Button -->	 -->
+		
+		<div class="clearfix"></div>		
+		
+		
+		<include file="Application/Admin/View/Public/tpl/js.html" />
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+
+				$("#delUsers").click(function(){
+					if(confirm('删除用户将重置相关项目架构师和系统owner，确认删除？')) {
+						document.getElementById("delUsersForm").submit();
+					}
+				});
+
+			});
+
+		</script>
+		
+	</body>
+	
+</html>

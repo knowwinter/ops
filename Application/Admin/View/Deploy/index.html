@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<include file="Application/Admin/View/Public/tpl/header.html" />
+	
+	<body>
+
+		<include file="Application/Admin/View/Public/tpl/navbar.html" />
+		<include file="Application/Admin/View/Public/tpl/sidebar.html" />
+		<include file="Application/Admin/View/Public/tpl/pageheader.html" />
+		
+				
+						
+					
+					
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="panel bk-bg-white">
+
+								<div class="panel-heading bk-bg-primary">
+									<h6><i class="fa fa-tags red"></i>系统发布向导</h6>
+									
+								</div>
+								
+								<div class="panel-body">
+									<div id="wizard2" class="wizard-type2">							
+										<ul class="steps" >
+											<li><a href="#tab1" data-toggle="tab"><span class="badge badge-info"><i class="fa fa-star"></i></span> 选择发布项目</a></li>
+											<li><a href="#tab2" data-toggle="tab"><span class="badge badge-info"><i class="fa  fa-camera"></i></span> 选择发布服务器</a></li>
+											<li><a href="#tab3" data-toggle="tab"><span class="badge badge-info"><i class="fa fa-credit-card"></i></span> 打包或上传发布物</a></li>
+											<li><a href="#tab4" data-toggle="tab"><span class="badge badge-info"><i class="fa fa-building"></i></span> 上传额外发布物</a></li>
+											<li><a href="#tab5" data-toggle="tab"><span class="badge badge-info"><i class="fa fa-coffee"></i></span> 设置发布顺序</a></li>
+											<li><a href="#tab6" data-toggle="tab"><span class="badge badge-info"><i class="fa fa-check"></i></span> 确认部署内容</a></li>
+											<li><a href="#tab7" data-toggle="tab"><span class="badge badge-info"><i class="fa  fa-certificate"></i></span> 完成部署</a></li>
+										</ul>
+										<div class="progress thin progress-striped active">
+											<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo (1/7)*100; ?>%;">
+											</div>
+										</div>	
+
+							<!-- <form action="{:U('Admin/Deploy/upload')}" id="form1" method="post" enctype="multipart/form-data" class="form-horizontal"> -->
+								<div class="tab-content form-horizontal">
+								
+									<div class="tab-pane" id="tab1">
+									
+									
+										<div class="form-group">
+											<div class="col-md-3">
+												
+											</div>
+											<div class="col-md-6">
+												<p class="form-control-static">请选择要发布的项目</p>
+											</div>
+											<div class="col-md-3">
+												
+											</div>
+										</div>
+										<volist name='project' id='data'>
+											<div class="form-group">
+												<div class="col-md-3">
+												
+												</div>
+												
+												<div class="col-md-6">
+													<div class="checkbox-custom">
+														<input type="checkbox" id="proj_{$data.project_id}" name="proj_{$data.project_name}" value="{$data.project_id}"> 
+														<label for="proj_{$data.project_id}"> {$data.project_name}</label>
+													</div>
+													
+												</div>
+												<div class="col-md-3">
+												
+											</div>
+											</div>
+										</volist>
+
+										
+										
+										<br>
+									
+								</div>
+
+									<div class="tab-pane" id="tab2">
+										
+									</div>
+									<!-- <form action="{:U("Admin/Deploy/upload")}" id="pkg" method="post" enctype="multipart/form-data" > -->
+									<div class="tab-pane" id="tab3">	
+									 <!-- <form action="{:U("Admin/Deploy/upload")}" id="pkg" method="post" enctype="multipart/form-data" >
+									</form> -->
+									</div>
+										
+									<!-- </form>	 -->
+									<div class="tab-pane" id="tab4">
+									<!-- <form action="{:U("Admin/Deploy/upload")}" id="extfile" method="post" enctype="multipart/form-data" >
+									</form>	 -->
+									</div>
+									
+									<div class="tab-pane" id="tab5">				
+									</div>
+									<div class="tab-pane" id="tab6">				
+									</div>
+									<div class="tab-pane" id="tab7">				
+									</div>
+																					
+											
+
+
+							
+
+
+											<div class="actions">
+												<input type="button" class="btn btn-info button-previous" name="previous" value="Previous" />
+												<input type="button" class="btn btn-primary button-next pull-right" name="next" value="Next" />
+												<input type="button" class="btn btn-primary button-deploy pull-right" name="next" value="Deploy" />
+												<input type="button" class="btn btn-success button-finish pull-right" name="finish" value="Finish" style="display:none"/>
+											</div>
+										<!-- </form> -->
+										</div>	
+										
+									</div>
+								</div>
+								
+							</div>							
+						</div>
+					</div>			
+					
+				<!-- </div>  -->
+				<!-- End Main Page -->	
+		
+				<include file="Application/Admin/View/Public/tpl/usage.html" />
+		
+		
+		<!-- Modal Dialog -->
+		<!-- <div class="modal fade" id="myModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title bk-fg-primary">Modal title</h4>
+					</div>
+					<div class="modal-body">
+						<p class="bk-fg-danger">Here settings can be configured...</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div><!-- End Modal Dialog -->
+
+		<!-- Finish Button -->
+		<!-- <div class="modal fade" id="finish-button">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title bk-fg-primary text-center">You successfully submit this form.</h4>
+					</div>
+				</div>
+			</div>
+		</div> --> --><!-- End Finish Button -->	
+		
+		<div class="clearfix"></div>		
+		
+		
+		<include file="Application/Admin/View/Public/tpl/js.html" />
+		
+	</body>
+	
+</html>

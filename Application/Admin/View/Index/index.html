@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<include file="Application/Admin/View/Public/tpl/header.html" />
+	
+	<body>
+	
+				<include file="Application/Admin/View/Public/tpl/navbar.html" />
+				<include file="Application/Admin/View/Public/tpl/sidebar.html" />
+				<include file="Application/Admin/View/Public/tpl/pageheader.html" />
+
+					<div class="row">
+						<div class="col-md-8">
+							<div class="panel bk-bg-white">
+								<div class="panel-heading">
+									<h3><i class="fa fa-align-left red"></i>系统使用概况</h3>
+									
+								</div>
+								<div class="panel-body">						
+									
+									<div class='col-sm-2'>用户数：</div>
+									<div class="col-sm-10">
+										<div class="progress light progress-xl ">
+
+											<div title="{$usernum}/100(个)" data-rel="tooltip" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{$usernum}" aria-valuemin="0" aria-valuemax="50" style="width: {$usernum}%;">
+												<span class="sr-only">90% Complete</span>
+											</div>
+										</div>				
+									</div>		
+									<div class='col-sm-2'>角色数：</div>
+									<div class="col-sm-10">
+										<div class="progress light progress-xl ">
+
+											<div title="{$rolenum}/100(个)" data-rel="tooltip" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: {$rolenum}%;">
+												<span class="sr-only">90% Complete</span>
+											</div>
+										</div>				
+									</div>		
+									<div class='col-sm-2'>项目数：</div>
+									<div class="col-sm-10">
+										<div class="progress light progress-xl ">
+
+											<div title="{$projectnum}/100(个)" data-rel="tooltip" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: {$projectnum}%;">
+												<span class="sr-only">90% Complete</span>
+											</div>
+										</div>				
+									</div>		
+									<div class='col-sm-2'>系统数：</div>
+									<div class="col-sm-10">
+										<div class="progress light progress-xl ">
+
+											<div title="{$systemnum}/100(个)" data-rel="tooltip" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: {$systemnum}%;">
+												<span class="sr-only">90% Complete</span>
+											</div>
+										</div>				
+									</div>		
+									<div class='col-sm-2'>主机数：</div>
+									<div class="col-sm-10">
+										<div class="progress light progress-xl ">
+
+											<div title="{$hostnum}/100(个)" data-rel="tooltip" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: {$hostnum}%;">
+												<span class="sr-only">90% Complete</span>
+											</div>
+										</div>				
+									</div>
+									<div class='col-sm-2'>规则数：</div>
+									<div class="col-sm-10">
+										<div class="progress light progress-xl ">
+
+											<div title="{$rulenum}/100(个)" data-rel="tooltip" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: {$rulenum}%;">
+												<span class="sr-only">90% Complete</span>
+											</div>
+										</div>				
+									</div>	
+									<div class='col-sm-2'>服务数：</div>
+									<div class="col-sm-10">
+										<div class="progress light progress-xl ">
+
+											<div title="{$servicenum}/100(个)" data-rel="tooltip" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: {$servicenum}%;">
+												<span class="sr-only">90% Complete</span>
+											</div>
+										</div>				
+									</div>						
+								</div>	
+							</div>
+						</div>
+					
+						<div class="col-md-4 panel-body bk-bg-white bk-fg-inverse text-left bk-padding-15">
+						<h5>最近操作：<a href="{:U('Admin/OperLog/lists',array('keyword' => $name))}"><font color="blue">查看全部</font></a></h5>
+						<div class="timelineProfile timeline-profile">
+							<div class="timeline-body">
+								<div class="timeline-title">
+									<h5 class="text-uppercase">操作日志</h5>
+								</div>
+								<ol class="timeline-items">
+									<volist name='oper' id='data'>
+									<li>
+										<div class="timeline-box">
+											<p class="text-muted">{$data.oper_time|date='Y-m-d H:i:s',###}</p>
+											<p>
+												{$data.oper} 
+											</p>
+											<p>
+												来源IP：{$data.source_ip} 
+											</p>
+										</div>
+									</li>
+								</volist>
+									
+								</ol>
+							</div>
+						</div>
+					</div>
+
+					</div>
+
+
+				<!-- End Main Page -->			
+		
+				<include file="Application/Admin/View/Public/tpl/usage.html" />
+		
+		
+		<!-- Modal Dialog -->
+		<!-- <div class="modal fade" id="myModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title bk-fg-primary">Modal title</h4>
+					</div>
+					<div class="modal-body">
+						<p class="bk-fg-danger">Here settings can be configured...</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div> -->
+		<!-- </div> --><!-- End Modal Dialog -->		
+		
+		<div class="clearfix"></div>		
+		
+		
+		<include file="Application/Admin/View/Public/tpl/js.html" />
+		
+	</body>
+	
+</html>

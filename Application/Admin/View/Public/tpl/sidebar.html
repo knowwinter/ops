@@ -1,0 +1,119 @@
+<!-- Start: Content -->
+		<div class="container-fluid content">	
+			<div class="row">
+			
+				<!-- Sidebar -->
+				<div class="sidebar">
+					<div class="sidebar-collapse">
+						<!-- Sidebar Header Logo-->
+						<div class="sidebar-header">
+							<img src="__PUBLIC__/assets/img/logo.png" class="img-responsive" alt="" />
+						</div>
+						<!-- Sidebar Menu-->
+						<div class="sidebar-menu">						
+							<nav id="menu" class="nav-main" role="navigation">
+								<ul class="nav nav-sidebar">
+									<div class="panel-body text-center">								
+										<div class="bk-avatar">
+											<img src="__PUBLIC__/{:session('avatar')}" class="img-circle bk-img-60" alt="" />
+										</div>
+										<div class="bk-padding-top-10">
+											<i class="fa fa-circle text-success"></i> <small>{:session('name')}</small>
+										</div>
+									</div>
+									<div class="divider2"></div>
+									<li>
+										<a href="{:U('Admin/Index/index')}">
+											<i class="fa fa-laptop" aria-hidden="true"></i><span>仪表盘</span>
+										</a>
+									</li>
+									<li>
+										<a href="page-inbox.html">
+											<span class="pull-right label label-primary">165</span>
+											<i class="fa fa-envelope" aria-hidden="true"></i><span>邮件</span>
+										</a>
+									</li>
+									
+									<li class="nav-parent {$active=='user'?'nav-expanded active':''}">
+										<a>
+											<i class="fa fa-users" aria-hidden="true"></i><span>用户管理</span>
+										</a>
+										<ul class="nav nav-children">
+											<li><a href="{:U('Admin/User/lists')}"><span class="text"> 用户列表</span></a></li>	
+											<li><a href="{:U('Admin/Role/lists')}"><span class="text"> 角色列表</span></a></li>	
+											<li><a href="{:U('Admin/Node/lists')}"><span class="text"> 节点列表</span></a></li>
+										</ul>
+									</li>
+
+									<li class="nav-parent {$active=='project'?'nav-expanded active':''}">
+										<a>
+											<i class="fa fa-book" aria-hidden="true"></i><span>项目管理</span>
+										</a>
+										<ul class="nav nav-children">
+											<li><a href="{:U('Admin/Project/lists')}"><span class="text"> 项目列表</span></a></li>		
+											<li><a href="{:U('Admin/System/lists')}"><span class="text"> 系统列表</span></a></li>
+											<li><a href="{:U('Admin/Rule/lists')}"><span class="text"> 部署规则</span></a></li>
+										</ul>
+									</li>
+									<li class="nav-parent {$active=='host'?'nav-expanded active':''}">
+										<a>
+											<i class="fa fa-list" aria-hidden="true"></i><span>主机管理</span>
+										</a>
+										<ul class="nav nav-children">
+											<li><a href="{:U('Admin/Host/lists')}"><span class="text"> 主机列表</span></a></li>		
+											<li><a href="{:U('Admin/Env/lists')}"><span class="text"> 环境配置</span></a></li>
+											
+										</ul>
+									</li>
+									
+									<li class="nav-parent {$active=='service'?'nav-expanded active':''}">
+										<a>
+											<i class="fa fa-desktop" aria-hidden="true"></i><span>服务管理</span>
+										</a>
+										<ul class="nav nav-children">
+											<li><a href="{:U('Admin/Service/lists')}"><span class="text"> 服务列表</span></a></li>		
+											
+										</ul>
+									</li>
+
+									<li>
+
+										<a href="{:U('Admin/Deploy/index')}">
+											<i class="fa fa-copy" aria-hidden="true"></i><span class="text"> 生产系统部署</span>
+										</a>
+										
+									</li>
+
+									<li>
+
+										<a href="{:U('Admin/OperLog/lists')}">
+											<i class="fa  fa-pencil-square" aria-hidden="true"></i><span class="text"> 日志审计</span>
+										</a>
+										
+									</li>
+									
+									
+									
+									
+								</ul>
+							</nav>
+						</div>
+						<!-- End Sidebar Menu-->
+					</div>
+					<!-- Sidebar Footer-->
+					<div class="sidebar-footer">	
+						<!-- <ul class="sidebar-terms">
+							<li><a href="index.php#">Terms</a></li>
+							<li><a href="index.php#">Privacy</a></li>
+							<li><a href="index.php#">Help</a></li>
+							<li><a href="index.php#">About</a></li>
+						</ul> -->
+						<ul class="sidebar-terms">
+						</ul>
+						<div class="copyright text-center">
+							<small>乡邻 <i class="fa  fa-cloud"></i> 由 <a href="http://www.xianglin.cn/" title="乡邻网" target="_blank">上海乡邻网络科技有现公司</a> - 运维团队研发维护 v1.0.1</small>
+						</div>					
+					</div>
+					<!-- End Sidebar Footer-->
+				</div>
+				<!-- End Sidebar -->

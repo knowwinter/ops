@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<include file="Application/Admin/View/Public/tpl/header.html" />
+	
+	<body>
+
+				<include file="Application/Admin/View/Public/tpl/navbar.html" />
+				<include file="Application/Admin/View/Public/tpl/sidebar.html" />
+				<include file="Application/Admin/View/Public/tpl/pageheader.html" />
+					
+					
+					<div class="row">	
+					<div class="col-md-3">
+					</div>	
+						<div class="col-md-6">
+							<div class="panel">
+								<div class="panel-heading bk-bg-primary">
+									<h6><i class="fa fa-indent red"></i>添加项目</h6>							
+								</div>
+								<div class="panel-body">
+									<form action="{:U('Admin/Project/addProject')}" method="post" enctype="multipart/form-data" class="form-horizontal ">
+									
+										
+										<div class="form-group">
+											<label class="col-md-3 control-label" for="project_name">项目名</label>
+											<div class="col-md-6">
+												<input type="text" id="project_name" name="project_name" class="form-control" placeholder="项目名">
+												<span class="help-block">请输入项目名</span>
+											</div>
+										</div>
+										
+
+										<div class="form-group">
+											<label class="col-md-3 control-label" for="architect_id">架构师</label>
+											<div class="col-md-6">
+												<select id="architect_id" name="architect_id" class="form-control" size="1">
+													<option value="0">请选择架构师</option>
+													<volist name="user" id="data">
+														<option value="{$data.user_id}" {$data[name] == '超级管理员' ? 'selected' : "" }>{$data.name}</option>
+													</volist>
+												</select>
+												<span class="help-block">选择项目架构师</span>
+											</div>
+										</div>
+
+										<div id="status" class="form-group">
+											<label class="col-md-3 control-label">项目状态</label>
+											<div class="col-md-9">
+												<div class="radio-custom radio-inline">
+													<input type="radio" id="status_radio1" name="status" value="0" checked="checked"> 
+													<label for="status_radio1"> 未运营</label>
+												</div>
+												<div class="radio-custom radio-inline">
+													<input type="radio" id="status_radio2" name="status" value="1"> 
+													<label for="status_radio2"> 已运营</label>
+												</div>
+												<div class="radio-custom radio-inline">
+													<input type="radio" id="status_radio3" name="status" value="2"> 
+													<label for="status_radio3"> 已下线</label>
+												</div>
+												
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label" for="project_desc">项目描述</label>
+											<div class="col-md-6">
+												<textarea id="project_desc" name="project_desc"  class="form-control" placeholder="项目描述"></textarea>
+												<span class="help-block">请输入项目描述</span>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="col-md-4">
+											</div>
+											<div class="col-md-4">
+
+											<!-- 	<input type="hidden" id="pid" name="pid" class="form-control" value='{$pid}'>
+												<input type="hidden" id="level" name="level" class="form-control" value='{$level}'> -->
+											
+												<button type="submit" class="btn btn-success">添加项目</button>
+												</div>
+											<div class="col-md-4">
+											</div>
+										</div>
+										
+										<br>
+									</form>
+								</div>	
+							</div>	
+						</div>	
+						<div class="col-md-3">
+					</div>				
+					</div>
+				<!-- End Main Page -->	
+		
+		<include file="Application/Admin/View/Public/tpl/usage.html" />
+		
+		
+		<!-- Modal Dialog -->
+		<!-- <div class="modal fade" id="myModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title bk-fg-primary">Modal title</h4>
+					</div>
+					<div class="modal-body">
+						<p class="bk-fg-danger">Here settings can be configured...</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div><!-- End Modal Dialog --> -->
+
+		<!-- Finish Button -->
+		<!-- <div class="modal fade" id="finish-button">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title bk-fg-primary text-center">You successfully submit this form.</h4>
+					</div>
+				</div>
+			</div>
+		</div><!-- End Finish Button -->	 -->
+		
+		<div class="clearfix"></div>		
+		
+		
+		<include file="Application/Admin/View/Public/tpl/js.html" />
+
+		<script type="text/javascript">
+			// $(document).ready(function(){
+
+			// 	$('.add-role').click(function(){
+			// 		var obj = $(this).parents('#role_div').clone();
+			// 		obj.find('.add-role').remove();
+			// 		obj.find('#role_divm3').append("<button type='button' class='btn-close'><i class='fa fa-times'></i></button>");
+			// 		$('#status').before(obj);
+			// 	});
+
+			// 	$('.btn-close').live('click',function(){
+					
+			// 		$(this).parents('#role_div').remove();
+			// 	});
+
+			// });
+
+		</script>
+		
+	</body>
+	
+</html>

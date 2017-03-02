@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<include file="Application/Admin/View/Public/tpl/header.html" />
+	
+	<body>
+
+				<include file="Application/Admin/View/Public/tpl/navbar.html" />
+				<include file="Application/Admin/View/Public/tpl/sidebar.html" />
+				<include file="Application/Admin/View/Public/tpl/pageheader.html" />
+					
+					
+					<div class="row">
+						<!-- <div class="col-md-3">
+						</div> -->
+						<div class="col-lg-12">
+							<div class="panel">
+								<div class="panel-heading bk-bg-primary">
+									<h6><i class="fa fa-table red"></i><span class="break"></span>配置权限</h6>
+									<!-- <div class="panel-actions">
+										<a href="table.html#" class="btn-setting"><i class="fa fa-rotate-right"></i></a>
+										<a href="table.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
+										<a href="table.html#" class="btn-close"><i class="fa fa-times"></i></a>
+									</div> -->
+								</div>
+
+
+								<div class="panel-body clearfix">
+									<div class="col-sm-12 pull-left">
+										<a href="{:U('Admin/Role/lists')}" class="bk-margin-5 btn btn-success">返回角色列表</a>	
+
+									</div>
+
+							<form action="{:U('Admin/Role/setAccess')}" method="post" accept-charset="utf-8">
+								
+							
+								<volist name='node' id='app'>
+									<div class='col-md-12'>
+										<hr />
+										
+											<div class="checkbox-custom checkbox-inline">
+												<input type="checkbox" id="{$app.id}" name="access[]" value="{$app.id}_1" level='1' {$app['access'] ? 'checked' : ''}> 
+												<label for="{$app.id}"><strong> {$app.name}({$app.title})</strong></label>
+											</div>
+
+											
+											<volist name='app.child' id='controler' key='k'>
+												<div class="panel panel-primary">
+													<div class="panel-heading">
+														<div class="row">
+															<div class="col-xs-12 text-left bk-vcenter">
+																<div class="checkbox-custom checkbox-inline">
+																	<input type="checkbox" id="{$controler.id}" name="access[]" value="{$controler.id}_2" level='2' {$controler['access'] ? 'checked' : ''}> 
+																	<label for="{$controler.id}"><h6 class="bk-margin-off"> 控制器： {$controler.name}({$controler.title})</h6></label>
+																</div>
+															</div>
+														</div>
+													</div>
+													
+														<div class="panel-body">
+
+
+																<div class="table-responsive">	
+																	<table class="table table-striped table-bordered bootstrap-datatable datatable">
+																		<thead>
+																			<tr>
+																				<th>选择</th>
+																				<th>方法名称</th>
+																				<th>方法描述</th>
+																				<th>状态</th>
+																			</tr>
+																		</thead>
+																		
+																		    
+																		<tbody>
+																			<volist name='controler.child' id='method' key='j'>								
+																			<tr>
+																				<td>
+																					<div class="checkbox-custom checkbox-inline">
+																						<input type="checkbox" id="{$method.id}" name="access[]" value="{$method.id}_3" level='3' {$method['access'] ? 'checked' : ''}> 
+																						<label for="{$method.id}"></label>
+																					</div>
+																				</td>
+																				
+																				<td>{$method.name}</td>
+																				<td>{$method.title}</td>
+																				
+																				<if condition='$method["status"] eq 1' >
+																				<td>开启</td>
+																				<else /> <td>关闭</td>
+																				</if>
+																				
+																			</tr>
+																			</volist>
+																		</tbody>
+																	
+																	</table>
+																</div>
+
+
+															<!-- <span>动作方法：</span> -->
+															<!-- <volist name='controler.child' id='method' key='j'>
+																<div class="checkbox-custom checkbox-inline">
+																	<input type="checkbox" id="{$method.id}" name="access[]" value="{$method.id}_3" level='3'> 
+																	<label for="{$method.id}">{$method.name}({$method.title})</label>
+																</div>
+															</volist> -->
+														</div> 
+													
+												</div>	
+											</volist>
+											
+										</div>
+									</volist>	
+										<div class="form-group">
+											<div class="col-md-4">
+											</div>
+												<div class="col-md-4" align="center">
+
+													<input type="hidden" id="role_id" name="role_id" class="form-control" value='{$role_id}'>
+													
+												
+													<button type="submit" class="btn btn-success">保存配置</button>
+												</div>
+											<div class="col-md-4">
+											</div>
+										</div>
+									</form>
+											
+									
+						<!-- 			<div class="dd pull-left" id="nestable3">
+										<ol class="dd-list">
+
+											<volist name='node' id='app'>
+												<li class="dd-item dd3-item" data-id="app{$i}">
+													<div class="dd-handle dd3-handle"><i class="fa fa-bars"></i></div><input type="checkbox"  name='access[]' value="{$app.id}_1" /><div class="dd3-content">应用模块：{$app.name}({$app.title})</div>
+													<if condition='isset($app["child"])'>
+														<ol class="dd-list">
+															<volist name='app.child' id='controler' key='k'>
+																
+																	<li class="dd-item dd3-item" data-id="controler{$k}">
+																		<div class="dd-handle dd3-handle"><i class="fa fa-bars"></i></div><input type="checkbox"  name='access[]' value="{$controler.id}_2" /><div class="dd3-content">控制器：{$controler.name}({$controler.title})</div>
+																		<if condition='isset($app["child"])'>
+																			<ol class="dd-list">
+																				<volist name='controler.child' id='method' key='j'>
+																					
+																						<li class="dd-item dd3-item" data-id="controler{$j}">
+																							<div class="dd-handle dd3-handle"><i class="fa fa-bars"></i></div><input type="checkbox"  name='access[]' value="{$method.id}_3" /><div class="dd3-content">动作方法：{$method.name}({$method.title})</div>
+																						</li>
+																					
+																				</volist>
+																			</ol>
+																		</if>
+																	</li>
+																
+															</volist>
+														</ol>
+													</if>
+												</li>
+											</volist>
+											
+										
+											</ol>
+										</div>	 -->		
+									</div>						
+								</div>
+							</div>
+						<!-- <div class="col-md-3">
+						</div> -->		
+					</div>					
+				
+
+				<!-- End Main Page -->	
+		
+		<include file="Application/Admin/View/Public/tpl/usage.html" />
+		
+		
+		<!-- Modal Dialog -->
+		<!-- <div class="modal fade" id="myModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title bk-fg-primary">Modal title</h4>
+					</div>
+					<div class="modal-body">
+						<p class="bk-fg-danger">Here settings can be configured...</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div><!-- End Modal Dialog --> -->
+
+		<!-- Finish Button -->
+		<!-- <div class="modal fade" id="finish-button">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title bk-fg-primary text-center">You successfully submit this form.</h4>
+					</div>
+				</div>
+			</div>
+		</div><!-- End Finish Button -->	 -->
+		
+		<div class="clearfix"></div>		
+		
+		
+		<include file="Application/Admin/View/Public/tpl/js.html" />
+		<script type="text/javascript">
+			$(document).ready(function(){
+
+				$('input[level=1]').click(function(){
+					var inputs = $(this).parents('.col-md-12').find('input');
+					$(this).attr('checked') ? inputs.attr('checked','checked') : inputs.removeAttr('checked');
+				});
+
+				$('input[level=2]').click(function(){
+					var inputs = $(this).parents('.panel-primary').find('input');
+					$(this).attr('checked') ? inputs.attr('checked','checked') : inputs.removeAttr('checked');
+				});
+
+				
+
+			});
+
+		</script>
+		
+	</body>
+	
+</html>

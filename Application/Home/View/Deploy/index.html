@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<include file="Application/Home/View/Public/tpl/header.html" />
+	
+	<body>
+
+		<include file="Application/Home/View/Public/tpl/navbar.html" />
+		<include file="Application/Home/View/Public/tpl/sidebar.html" />
+		<include file="Application/Home/View/Public/tpl/pageheader.html" />
+		
+				
+						
+					
+					
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="panel bk-bg-white">
+								<div class="panel-heading bk-bg-primary">
+									<h6><i class="fa fa-tags red"></i>Wizard with validation</h6>
+									<div class="panel-actions">
+										<a href="deploy-wizard.php#" class="btn-setting"><i class="fa fa-rotate-right"></i></a>
+										<a href="deploy-wizard.php#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
+										<a href="deploy-wizard.php#" class="btn-close"><i class="fa fa-times"></i></a>
+									</div>
+								</div>
+								<div class="panel-body">
+									<div id="wizard2" class="wizard-type2">							
+										<ul class="steps" >
+											<li><a href="deploy-wizard.php#tab1" data-toggle="tab" onclick="check()"><span class="badge badge-info"><i class="fa fa-star"></i></span> 选择要部署的系统及服务器</a></li>
+											<li><a href="deploy-wizard.php#tab2" data-toggle="tab" onclick="check()"><span class="badge badge-info"><i class="fa fa-credit-card"></i></span> 输入要部署系统的svn地址</a></li>
+											<li><a href="deploy-wizard.php#tab3" data-toggle="tab" onclick="check()"><span class="badge badge-info"><i class="fa fa-building"></i></span> 上传额外的部署文件</a></li>
+											<li><a href="deploy-wizard.php#tab4" data-toggle="tab" onclick="check()"><span class="badge badge-info"><i class="fa fa-check"></i></span> 确认需要部署的内容</a></li>
+											<li><a href="deploy-wizard.php#tab5" data-toggle="tab" onclick="check()"><span class="badge badge-info"><i class="fa fa-check"></i></span> 完成部署</a></li>
+										</ul>
+										<div class="progress thin progress-striped active">
+											<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+											</div>
+										</div>	
+
+										<form action="act.php" id="form1" method="post" enctype="multipart/form-data" class="form-horizontal">							
+								<div class="tab-content">
+								
+									<div class="tab-pane" id="tab1">
+									
+									
+										<div class="form-group">
+											<div class="col-md-3">
+												
+											</div>
+											<div class="col-md-9">
+												<p class="form-control-static">请选择要部署的系统和服务器</p>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label">webfront</label>
+											<div class="col-md-9">
+												<div class="checkbox-custom">
+													<input type="checkbox" id="webfrontsvr" name="webfrontsvr" value="webfront"> 
+													<label for="webfrontsvr"> webfront</label>
+												</div>
+												
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label class="col-md-3 control-label">wechat</label>
+											<div class="col-md-9">
+												<div class="checkbox-custom">
+														<input type="checkbox" id="wechatsvr1" name="wechatsvr1" value="wechat-1"> 
+													<label for="wechatsvr1"> wechat1</label>
+												</div>
+												<div class="checkbox-custom">
+														<input type="checkbox" id="wechatsvr2" name="wechatsvr2" value="wechat-2"> 
+													<label for="wechatsvr2"> wechat2</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label class="col-md-3 control-label">nodecore</label>
+											<div class="col-md-9">
+												<div class="checkbox-custom">
+														<input type="checkbox" id="nodecoresvr1" name="nodecoresvr1" value="nodecore-1"> 
+													<label for="nodecoresvr1"> nodecore1</label>
+												</div>
+												<div class="checkbox-custom">
+														<input type="checkbox" id="nodecoresvr2" name="nodecoresvr2" value="nodecore-2"> 
+													<label for="nodecoresvr2"> nodecore2</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label class="col-md-3 control-label">pcweb</label>
+											<div class="col-md-9">
+												<div class="checkbox-custom">
+														<input type="checkbox" id="pcwebsvr1" name="pcwebsvr1" value="pcweb-1"> 
+													<label for="pcwebsvr1"> pcweb1</label>
+												</div>
+												<div class="checkbox-custom">
+														<input type="checkbox" id="pcwebsvr2" name="pcwebsvr2" value="pcweb-2"> 
+													<label for="pcwebsvr2"> pcweb2</label>
+												</div>
+											</div>
+										</div>
+										
+										<br>
+									
+								</div>
+
+									<div class="tab-pane" id="tab2">
+									</div>
+									<div class="tab-pane" id="tab3">			
+									</div>
+									<div class="tab-pane" id="tab4">		
+									</div>
+									<div class="tab-pane" id="tab5">				
+									</div>
+																					
+											
+
+
+							
+
+
+											<div class="actions">
+												<input type="button" class="btn btn-info button-previous" name="previous" value="Previous" />
+												<input type="button" class="btn btn-primary button-next pull-right" name="next" value="Next" onclick="check()" />
+												<input type="button" class="btn btn-success button-finish pull-right" name="finish" value="Finish" style="display:none"/>
+											</div>
+										
+										</div>	
+										</form>
+									</div>
+								</div>
+							</div>							
+						</div>
+					</div>			
+				</div>
+				<!-- End Main Page -->	
+		
+				<include file="Application/Home/View/Public/tpl/usage.html" />
+		
+		
+		<!-- Modal Dialog -->
+		<div class="modal fade" id="myModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title bk-fg-primary">Modal title</h4>
+					</div>
+					<div class="modal-body">
+						<p class="bk-fg-danger">Here settings can be configured...</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div><!-- End Modal Dialog -->
+
+		<!-- Finish Button -->
+		<div class="modal fade" id="finish-button">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title bk-fg-primary text-center">You successfully submit this form.</h4>
+					</div>
+				</div>
+			</div>
+		</div><!-- End Finish Button -->	
+		
+		<div class="clearfix"></div>		
+		
+		
+		<include file="Application/Home/View/Public/tpl/js.html" />
+		
+	</body>
+	
+</html>
