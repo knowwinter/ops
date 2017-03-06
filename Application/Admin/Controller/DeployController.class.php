@@ -299,7 +299,16 @@ class DeployController extends CommonController {
         $res = '';
         $ret = '';
         $webroot = $_SERVER['DOCUMENT_ROOT'];
-        $ansiblePlayBook = exec('/usr/bin/whereis ansible-playbook',$output2,$ret2);
+        $ansiblePlayBook = C('ANSIBLE-PLAYBOOK');
+        if(strpos($ansiblePlayBook,'ansible-playbook') != 0) {
+            $log['oper'] = '未找到ansible-playbook，请确认ansible安装是否正确！';
+            M('oper_log')->add($log);
+           
+            
+            $host['ret'] = 'ansible-failure';
+            $this->ajaxReturn($host);
+        }        
+        /*$ansiblePlayBook = exec('/usr/bin/whereis ansible-playbook',$output2,$ret2);
         $ansiblePlayBook = explode(' ',$ansiblePlayBook);
         $ansiblePlayBook = $ansiblePlayBook[1];
         if(strpos($ansiblePlayBook,'ansible-playbook') === false) {
@@ -309,7 +318,7 @@ class DeployController extends CommonController {
             
             $host['ret'] = 'ansible-failure';
             $this->ajaxReturn($host);
-        }
+        }*/
         if($deploy_rule == 'Java-已打包' || $deploy_rule == 'Java-SVN') {
             $service = I('service');
             $service_home = I('service_home');

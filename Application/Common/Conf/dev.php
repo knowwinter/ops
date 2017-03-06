@@ -8,4 +8,7 @@ return array(
     'DB_PORT'               =>  '3306',        // 端口
     'DB_PREFIX'             =>  'ops_',    // 数据库表前缀
 
+    'ANSIBLE'				=>	'/Users/admin/anaconda2/bin/ansible',
+    'ANSIBLE-PLAYBOOK'		=>	'/Users/admin/anaconda2/bin/ansible-playbook',
+
 );
