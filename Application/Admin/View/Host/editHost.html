@@ -154,7 +154,7 @@
 											</div>
 										</if>
 										
-										<div id="status" class="form-group">
+										<!-- <div id="status" class="form-group">
 											<label class="col-md-3 control-label">主机状态</label>
 											<div class="col-md-9">
 												<div class="radio-custom radio-inline">
@@ -167,8 +167,8 @@
 												</div>
 												
 											</div>
-										</div>
-										<div class="form-group">
+										</div> -->
+										<div class="form-group" id="host_desc">
 											<label class="col-md-3 control-label" for="host_desc">主机描述</label>
 											<div class="col-md-6">
 												<textarea id="host_desc" name="host_desc"  class="form-control" placeholder="主机描述">{$host.host_desc}</textarea>
@@ -185,7 +185,7 @@
 												<input type="hidden" id="old_host_name" name="old_host_name" class="form-control" value='{$host.host_name}'>
 												<!-- <input type="hidden" id="level" name="level" class="form-control" value='{$level}'> -->
 											
-												<button type="submit" class="btn btn-success">保存主机</button>
+												<button type="submit" class="btn btn-success" id='submit'>保存主机</button>
 												</div>
 											<div class="col-md-4">
 											</div>
@@ -247,7 +247,7 @@
 					var obj = $(this).parents('#service_div').clone();
 					obj.find('.add-service').remove();
 					obj.find('#service_divm3').append("<button type='button' class='service-close'><i class='fa fa-times'></i></button>");
-					$('#status').before(obj);
+					$('#host_desc').before(obj);
 				});
 
 				$('.service-close').live('click',function(){
@@ -278,6 +278,10 @@
 					
 					$(this).parents('#system_div').remove();
 				});
+
+				$('#submit').click(function(){
+					$('#submit').text('正在修改。。。');
+				});					
 
 			});
 

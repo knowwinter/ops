@@ -7,4 +7,7 @@ return array(
     'DB_PWD'                =>  'y1u9x8i2a0',          // 密码
     'DB_PORT'               =>  '3306',        // 端口
     'DB_PREFIX'             =>  'ops_',    // 数据库表前缀
+	'ANSIBLE'				=>	'/usr/local/bin/ansible',
+    'ANSIBLE-PLAYBOOK'		=>	'/usr/local/bin/ansible-playbook',  
+    'version'				=>	'v1.0.2',  
 );

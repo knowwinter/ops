@@ -19,9 +19,10 @@ class HostController extends CommonController {
     	$this->assign('active',$this->active);
 
     	$host = D('HostRelation');
+        $user = D('UserRelation');
         $keyword = '';
         $condition = '';
-    	if(isset($_GET) && $_GET['keyword'] != '' ) {
+    	if(I('keyword') != '') {
             $condition['host_name']=array('like',I('keyword') . '%');
             $condition['host_desc']=array('like',I('keyword') . '%');
             $condition['_logic']='OR';
@@ -34,8 +35,13 @@ class HostController extends CommonController {
             $count = $host->relation(true)->count();
     	}
         
-    	
-    	$page = new \Lib\MyPage($count,5);
+    	$user_data['user_id'] = session(C('USER_AUTH_KEY'));
+        
+        $user_data['page'] = $_POST['page'] != '' ? $_POST['page'] : session('page');
+        if($user->save($user_data) !== false) {
+            session('page',$user_data['page']);
+        }       
+        $page = new \Lib\MyPage($count,session('page'));
 
     	//$page->parameter=I('get.');
     	//$page->setConfig('header','条数据');
@@ -110,7 +116,8 @@ class HostController extends CommonController {
     	$this->assign('hostlist',$list);
     	$this->assign('page',$show);
     	$this->assign('keyword',$keyword);
-    
+        $this->assign('count',$count);
+        $this->assign('userPage',session('page'));          
         //print_r($list);die;
     	$this->assign('level1',$this->level1);
     	$this->assign('level2',$this->level2);
@@ -135,8 +142,8 @@ class HostController extends CommonController {
                 array('env_id','0','所属环境未选择！',1,'notequal'),
                 array('service_id','chkrole','运行服务选择不正确！',1,'function'),
                 array('ipaddr','require','IP地址不能为空！'),
-                array('ipaddr','chkip','IP地址非法！',1,'function'),
-                array('status', 'require','主机状态必须设置！',1)
+                array('ipaddr','chkip','IP地址非法！',1,'function')
+                //array('status', 'require','主机状态必须设置！',1)
             );
 
         $log = array(
@@ -147,6 +154,13 @@ class HostController extends CommonController {
                 );
 
         if(IS_POST) {
+            $retstr = check_host(I('ipaddr'));
+            if($retstr['code'] == '0') {
+                $log['oper'] = $retstr['errmsg'];
+                M('oper_log')->add($log);
+                $this->error('主机添加失败！'. $retstr['errmsg']);
+                exit;
+            }
             $host_data = array(
                     'host_name' => I('host_name'),
                     'host_desc' => I('host_desc'),
@@ -154,19 +168,30 @@ class HostController extends CommonController {
                     'dns' => I('dns'),
                     'env_id' => I('env_id'),
                     'system_id' => I('system_id'),
-                    'status' => I('status')
+                    'status' => $retstr['status']
                 );
             $host = M('host');
 
             if($host->validate($rule)->create()) {
                 $service = array();
                 $system_host = array();
+
                 $host->startTrans();
                 if($host_id = $host->add($host_data)) {
                    foreach ($_POST['service_id'] as $v) {
+                        $service_name = M('service')->getFieldByService_id($v,'service_name');
+                        $servret = check_service($host_data['ipaddr'],$service_name);
+                        if($servret['code'] == '0') {
+                            $host->rollback();
+                            $log['oper'] = $servret['errmsg'];
+                            M('oper_log')->add($log);
+                            $this->error('主机添加失败！'. $servret['errmsg']);
+                            exit;
+                        }                        
                         $service[] = array(
                             'service_id' => $v,
-                            'host_id' => $host_id
+                            'host_id' => $host_id,
+                            'service_status' => $servret['service_status']
                             );
                     }
 
@@ -238,7 +263,7 @@ class HostController extends CommonController {
                 array('service_id','chkrole','运行服务选择不正确！',1,'function'),
                 array('ipaddr','require','IP地址不能为空！'),
                 array('ipaddr','chkip','IP地址非法！',1,'function'),
-                array('status', 'require','主机状态必须设置！',1)
+                //array('status', 'require','主机状态必须设置！',1)
             );
 
         $log = array(
@@ -249,7 +274,13 @@ class HostController extends CommonController {
                 );
 
         if(IS_POST) {
-           
+            $retstr = check_host(I('ipaddr'));
+            if($retstr['code'] == '0') {
+                $log['oper'] = $retstr['errmsg'];
+                M('oper_log')->add($log);
+                $this->error('主机修改失败！'. $retstr['errmsg']);
+                exit;
+            }            
                $host_data = array(
                     'host_id' => I('host_id'),
                     'host_name' => I('host_name'),
@@ -258,7 +289,7 @@ class HostController extends CommonController {
                     'dns' => I('dns'),
                     'env_id' => I('env_id'),
                     'system_id' => I('system_id'),
-                    'status' => I('status')
+                    'status' => $retstr['status']
                 );
 
             if(I('host_name') != I('old_host_name')){
@@ -271,7 +302,7 @@ class HostController extends CommonController {
                     array('service_id','chkrole','运行服务选择不正确！',1,'function'),
                     array('ipaddr','require','IP地址不能为空！'),
                     array('ipaddr','chkip','IP地址非法！',1,'function'),
-                    array('status', 'require','主机状态必须设置！',1)
+                    //array('status', 'require','主机状态必须设置！',1)
                 );
             }
             
@@ -283,9 +314,19 @@ class HostController extends CommonController {
                 $system_host = array();
                 if($host->save($host_data) !== false) {
                    foreach ($_POST['service_id'] as $v) {
+                        $service_name = M('service')->getFieldByService_id($v,'service_name');
+                        $servret = check_service($host_data['ipaddr'],$service_name);
+                        if($servret['code'] == '0') {
+                            $host->rollback();
+                            $log['oper'] = $servret['errmsg'];
+                            M('oper_log')->add($log);
+                            $this->error('主机修改失败！'. $servret['errmsg']);
+                            exit;
+                        }                                                
                         $service[] = array(
                             'service_id' => $v,
-                            'host_id' => $host_data['host_id']
+                            'host_id' => $host_data['host_id'],
+                            'service_status' => $servret['service_status']
                             );
                     }
 
@@ -484,20 +525,34 @@ class HostController extends CommonController {
         $gather = 'false';
         $status = $action == 'stopped' ? 0 : 1;
         $webroot = $_SERVER['DOCUMENT_ROOT'];
-        $ansiblePlayBook = exec('/usr/bin/whereis ansible-playbook',$output2,$ret2);
-        $ansiblePlayBook = explode(' ',$ansiblePlayBook);
-        $ansiblePlayBook = $ansiblePlayBook[1];
-        if(strpos($ansiblePlayBook,'ansible-playbook') === false) {
+        $ansiblePlayBook = C('ANSIBLE-PLAYBOOK');
+        $testcommand = $ansiblePlayBook . ' --version';
+        exec($testcommand,$output2,$ret2);
+        //print_r($output2);die;
+        if(strpos($output2[0],'ansible-playbook') != 0) {
             $log['oper'] = '未找到ansible-playbook，请确认ansible安装是否正确！';
             M('oper_log')->add($log);
-           
-            
+
+
             $host['ret'] = 'ansible-failure';
             $this->ajaxReturn($host);
         }
+        // $ansiblePlayBook = exec('/usr/bin/whereis ansible-playbook',$output2,$ret2);
+        // $ansiblePlayBook = explode(' ',$ansiblePlayBook);
+        // $ansiblePlayBook = $ansiblePlayBook[1];
+        // if(strpos($ansiblePlayBook,'ansible-playbook') === false) {
+        //     $log['oper'] = '未找到ansible-playbook，请确认ansible安装是否正确！';
+        //     M('oper_log')->add($log);
+           
+            
+        //     $host['ret'] = 'ansible-failure';
+        //     $this->ajaxReturn($host);
+        // }
         $playbook = $webroot . '/playbook/service.yml';
         $command = $ansiblePlayBook . ' ' . $playbook . ' --extra-vars "host=' . $ip . ' user=' . $user . ' gather=' . $gather . ' service=' . $service . ' service_home=' . $service_home . ' action=' . $action . '"';
+
         exec($command,$output,$ret);
+        
         $res = $output[count($output) - 2];
         if($ret != 0) {
             $msg = '';

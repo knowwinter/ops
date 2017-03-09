@@ -4,7 +4,7 @@
 # author: pengpeng
 # time: 2015-09-25
 
-source /home/admin/.bash_profile
+source ~/.bash_profile
 
 D=`date +%Y%m%d`
 

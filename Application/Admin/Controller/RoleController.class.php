@@ -16,15 +16,21 @@ class RoleController extends CommonController {
     	$this->assign('active',$active);
 
     	$role = M('role');
-    	if(isset($_GET) && $_GET['keyword'] != '' ) {
+        $user = D('UserRelation');
+    	if(I('keyword') != '') {
     		$keyword = I('keyword');
     		$count = $role->where('name like "' . $keyword . '%" or remark like "' . $keyword . '%"')->count();
     	} else {
     		$count = $role->count();
     	}
 
-    	
-    	$page = new \Lib\MyPage($count,5);
+    	$user_data['user_id'] = session(C('USER_AUTH_KEY'));
+        
+        $user_data['page'] = $_POST['page'] != '' ? $_POST['page'] : session('page');
+        if($user->save($user_data) !== false) {
+            session('page',$user_data['page']);
+        }       
+        $page = new \Lib\MyPage($count,session('page'));
 
     	//$page->parameter=I('get.');
     	//$page->setConfig('header','条数据');
@@ -46,8 +52,10 @@ class RoleController extends CommonController {
     	$this->assign('rolelist',$list);
     	$this->assign('page',$show);
     	$this->assign('keyword',$keyword);
-    
-    	$this->assign('level1',$this->level1);
+        $this->assign('count',$count);
+        $this->assign('userPage',session('page'));        
+    	
+        $this->assign('level1',$this->level1);
     	$this->assign('level2',$this->level2);
     	$this->assign('level3',$this->level3);
       	$this->display();

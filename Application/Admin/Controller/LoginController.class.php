@@ -68,6 +68,7 @@ class LoginController extends Controller {
     		session('avatar',$user['avatar']);
     		session('last_login',date('Y-m-d H:i:s',$data['last_login']));
     		session('login_ip',$data['login_ip']);
+            session('page',$user['page']);
 
     		if($user['login_name'] == C('RBAC_SUPERADMIN')) {
     			session(C('ADMIN_AUTH_KEY'),true);

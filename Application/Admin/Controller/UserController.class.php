@@ -20,21 +20,38 @@ class UserController extends CommonController {
     	$user = D('UserRelation');
         $keyword = '';
         $condition = '';
-    	if(isset($_GET) && $_GET['keyword'] != '' ) {
+    	// if(isset($_POST) && $_POST['keyword'] != '' ) {
+     //        $condition['login_name']=array('like',I('keyword') . '%');
+     //        $condition['name']=array('like',I('keyword') . '%');
+     //        $condition['_logic']='OR';
+    	// 	$keyword = I('keyword');
+     //        $count = $user->relation(true)->where($condition)->count();
+
+    	// 	//$count = $user->where('user.login_name like "' . $keyword . '%" or user.username like "' . $keyword . '%"')->count();
+    	// } else {
+    	// 	//$count = $user->where(array('login_name' => array('like',$keyword .'%' )) or array('name' => array('like',$keyword .'%' )))->group('user_id')->count();
+     //        $count = $user->relation(true)->count();
+    	// }
+        
+        if(I('keyword') != '' ) {
             $condition['login_name']=array('like',I('keyword') . '%');
             $condition['name']=array('like',I('keyword') . '%');
             $condition['_logic']='OR';
-    		$keyword = I('keyword');
+            $keyword = I('keyword');
             $count = $user->relation(true)->where($condition)->count();
 
-    		//$count = $user->where('user.login_name like "' . $keyword . '%" or user.username like "' . $keyword . '%"')->count();
-    	} else {
-    		//$count = $user->where(array('login_name' => array('like',$keyword .'%' )) or array('name' => array('like',$keyword .'%' )))->group('user_id')->count();
+            //$count = $user->where('user.login_name like "' . $keyword . '%" or user.username like "' . $keyword . '%"')->count();
+        } else {
+            //$count = $user->where(array('login_name' => array('like',$keyword .'%' )) or array('name' => array('like',$keyword .'%' )))->group('user_id')->count();
             $count = $user->relation(true)->count();
-    	}
+        }         
+        $user_data['user_id'] = session(C('USER_AUTH_KEY'));
         
-    	
-    	$page = new \Lib\MyPage($count,5);
+        $user_data['page'] = $_POST['page'] != '' ? $_POST['page'] : session('page');
+        if($user->save($user_data) !== false) {
+            session('page',$user_data['page']);
+        }    	
+    	$page = new \Lib\MyPage($count,session('page'));
 
     	//$page->parameter=I('get.');
     	//$page->setConfig('header','条数据');
@@ -78,6 +95,8 @@ class UserController extends CommonController {
     	$this->assign('userlist',$list);
     	$this->assign('page',$show);
     	$this->assign('keyword',$keyword);
+        $this->assign('count',$count);
+        $this->assign('userPage',session('page'));
     
         //print_r($list);die;
     	$this->assign('level1',$this->level1);

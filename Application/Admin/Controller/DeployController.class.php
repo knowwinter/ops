@@ -12,17 +12,17 @@ class DeployController extends CommonController {
         //$this->level2 = '生产系统部署';
 
          if(!empty($_GET)) {
-            
+
          }else{
             $map['project_name'] = array('NEQ','默认项目');
             $this->project = M('project')->where($map)->select();
-           
-           
+
+
         }
         // if(IS_AJAX) {
         //     print_r($_POST);die;
         // }
-        
+
          // $data = array('3');
          //    $map['host_id'] = array('in',$data);
          //    // $condition['env_name'] = '生产环境';
@@ -36,7 +36,7 @@ class DeployController extends CommonController {
          //   $system = D('SystemRelation')->relation(true)->where($condition)->select();
          //   print_r($system);die;
          //    $this->ajaxReturn($system);
-	
+
 	//$svn = I('svn');
         //$system_id = I('system_id');
         //$condition['system_id'] = $system_id;
@@ -51,7 +51,7 @@ class DeployController extends CommonController {
 
      public function system(){
 
-        
+
         if(IS_AJAX) {
             $data = I('project_ids');
             $map['project_id'] = array('in',$data);
@@ -72,7 +72,7 @@ class DeployController extends CommonController {
             $system = $tmp;
             $this->ajaxReturn($system);
         }
-        
+
 
 
         // $this->assign('level1',$this->level1);
@@ -83,7 +83,7 @@ class DeployController extends CommonController {
 
      public function host(){
 
-        
+
         if(IS_AJAX) {
             $data = I('ids');
             //$data = array_unique($data);
@@ -105,10 +105,10 @@ class DeployController extends CommonController {
            // }
            $condition['system_id'] = array('in',$system_ids);
            $system = D('SystemRelation')->relation(true)->where($condition)->select();
-           
+
             $this->ajaxReturn($system);
         }
-        
+
 
 
         // $this->assign('level1',$this->level1);
@@ -119,7 +119,7 @@ class DeployController extends CommonController {
 
      public function summary(){
 
-        
+
         if(IS_AJAX) {
             $ids = I('ids');
             $system_ids = array();
@@ -157,8 +157,8 @@ class DeployController extends CommonController {
            //         $tmp[] = $v;
            //     }
            // }
-           // 
-           
+           //
+
            foreach ($system as $k => $v) {
                 $host = array();
                 foreach ($v['host'] as $m) {
@@ -194,7 +194,7 @@ class DeployController extends CommonController {
                 }else{
                     $deployinfo[$v]['pkg'] = $value[$k];
                 }
-               
+
            }
 
            $extfile = I('extfile');
@@ -261,7 +261,7 @@ class DeployController extends CommonController {
             $this->ajaxReturn($system);
             //$this->ajaxReturn($data);
         }
-        
+
 
 
         // $this->assign('level1',$this->level1);
@@ -277,7 +277,7 @@ class DeployController extends CommonController {
                     'login_user_id' => session('uid'),
                     'source_ip' => session('login_ip'),
                     'oper_time' => time(),
-                    
+
                 );
         //$system = I('system');
         //$host = I('host');
@@ -300,22 +300,25 @@ class DeployController extends CommonController {
         $ret = '';
         $webroot = $_SERVER['DOCUMENT_ROOT'];
         $ansiblePlayBook = C('ANSIBLE-PLAYBOOK');
-        if(strpos($ansiblePlayBook,'ansible-playbook') != 0) {
+        $testcommand = $ansiblePlayBook . ' --version';
+        exec($testcommand,$output2,$ret2);
+        
+        if(strpos($output2[0],'ansible-playbook') != 0) {
             $log['oper'] = '未找到ansible-playbook，请确认ansible安装是否正确！';
             M('oper_log')->add($log);
-           
-            
+
+
             $host['ret'] = 'ansible-failure';
             $this->ajaxReturn($host);
-        }        
+        }
         /*$ansiblePlayBook = exec('/usr/bin/whereis ansible-playbook',$output2,$ret2);
         $ansiblePlayBook = explode(' ',$ansiblePlayBook);
         $ansiblePlayBook = $ansiblePlayBook[1];
         if(strpos($ansiblePlayBook,'ansible-playbook') === false) {
             $log['oper'] = '未找到ansible-playbook，请确认ansible安装是否正确！';
             M('oper_log')->add($log);
-           
-            
+
+
             $host['ret'] = 'ansible-failure';
             $this->ajaxReturn($host);
         }*/
@@ -329,7 +332,7 @@ class DeployController extends CommonController {
             $dest = $old_warFile;
             $playbook = $webroot . '/playbook/java-deploy.yml';
             $command = $ansiblePlayBook . ' ' . $playbook . ' --extra-vars "host=' . $ip . ' user=' . $user . ' gather=' . $gather . ' service=' . $service . ' service_home=' . $service_home . ' old_warFile=' . $old_warFile . ' backup=' . $backup . ' backuppath=' . $backuppath . ' old_path=' . $old_path . ' src=' . $src . ' dest=' . $dest . '"';
-            
+
         }else if($deploy_rule == '静态文件-已打包' || $deploy_rule == '静态文件-SVN'){
             $dest = I('deploy_path');
             $tmpzip = explode('/',$dest);
@@ -341,7 +344,7 @@ class DeployController extends CommonController {
             $owner = 'admin';
             $playbook = $webroot . '/playbook/sf-deploy.yml';
             $command = $ansiblePlayBook . ' ' . $playbook . ' --extra-vars "host=' . $ip . ' user=' . $user . ' gather=' . $gather . ' backupfile=' . $backupfile . ' backuppath=' . $backuppath . ' oldfile=' . $oldfile . ' src=' . $src . ' dest=' . $dest . ' group=' . $group . ' owner=' . $owner . '"';
-            
+
         }else if($deploy_rule == 'PHP-已打包' || $deploy_rule == 'PHP-SVN') {
             $dest = I('deploy_path');
             $tmpzip = explode('/',$dest);
@@ -355,10 +358,10 @@ class DeployController extends CommonController {
             if($system_name == 'ecstore') {
                 $exclude = '--exclude=' . $dest . '/public/' . ' --exclude=' . $dest . '/data/' . ' --exclude=' . $dest . '/wap_themes/' . ' --exclude=' . $dest . '/themes/';
             }
-            
+
             $playbook = $webroot . '/playbook/php-deploy.yml';
             $command = $ansiblePlayBook . ' ' . $playbook . ' --extra-vars "host=' . $ip . ' user=' . $user . ' gather=' . $gather . ' backupfile=' . $backupfile . ' backuppath=' . $backuppath . ' exclude=' . $exclude . ' oldfile=' . $oldfile . ' src=' . $src . ' dest=' . $dest . ' group=' . $group . ' owner=' . $owner . '"';
-            
+
         }else {
             $this->ajaxReturn(false);
         }
@@ -378,7 +381,7 @@ class DeployController extends CommonController {
             $host['ret'] = 'sys-failure';
             $host['command'] = $command;
 
-            
+
             $this->ajaxReturn($host);
 
         }else {
@@ -409,7 +412,7 @@ class DeployController extends CommonController {
                         $host['ip'] = $ip;
                         $host['host_name'] = I('host_name');
                         $host['ret'] = 'ef-failure';
-                        
+
                         $this->ajaxReturn($host);
                     }else {
                         if(strpos($efres,'unreachable=0') && strpos($efres,'failed=0')) {
@@ -508,16 +511,16 @@ class DeployController extends CommonController {
                 $host['res'] = $res;
                 $this->ajaxReturn($host);
             }
-        }     
+        }
     }
-    
+
 
     public function upload() {
         $log = array(
                     'login_user_id' => session('uid'),
                     'source_ip' => session('login_ip'),
                     'oper_time' => time(),
-                    
+
                 );
 
         $file = $_FILES;
@@ -572,7 +575,7 @@ class DeployController extends CommonController {
                     'login_user_id' => session('uid'),
                     'source_ip' => session('login_ip'),
                     'oper_time' => time(),
-                    
+
                 );
         $webroot = $_SERVER['DOCUMENT_ROOT'];
         $svn = trim(I('svn'));
@@ -581,7 +584,7 @@ class DeployController extends CommonController {
         $rootPath = '/tmp/' . $randstr;
         $version = '';
         $system_id = I('system_id');
-        $condition['system_id'] = $system_id; 
+        $condition['system_id'] = $system_id;
         $system_name = M('system')->where($condition)->getField('system_name');
         $system = D('SystemRelation')->relation(true)->where($condition)->find();
         $deploy_rule = $system['deploy_rule']['rule_name'];
@@ -589,7 +592,7 @@ class DeployController extends CommonController {
         if($deploy_rule == 'Java-SVN') {
             $env = 'prd';
             $version = end($tmp);
-            $command = $webroot . '/bin/scb.sh ' . $system_name . ' ' . $svn . ' ' . $env . ' ' . $rootPath; 
+            $command = $webroot . '/bin/scb.sh ' . $system_name . ' ' . $svn . ' ' . $env . ' ' . $rootPath;
         }else if($deploy_rule == 'PHP-SVN') {
             $version = end($tmp);
             $command = $webroot . '/bin/svnco.sh ' . $system_name . ' ' . $svn . ' ' . $version . ' ' . $rootPath;
@@ -597,7 +600,7 @@ class DeployController extends CommonController {
             $version = $tmp[count($tmp) - 2];
             $command = $webroot . '/bin/svnco.sh ' . $system_name . ' ' . $svn . ' ' . $version . ' ' . $rootPath;
         }
-        
+
         $res = exec($command,$output,$ret);
         if($ret == 0) {
             $tmp_pkg['tmp_pkg'] = $res;
@@ -614,5 +617,5 @@ class DeployController extends CommonController {
     	$data['output'] = $output;
         $this->ajaxReturn($data);
     }
-   
+
 }
