@@ -6,9 +6,18 @@ class MonitorController extends Controller {
     public function monitor() {
         $host = D('HostRelation');
         $list = $host->relation(true)->select();
-
+        $ansible = C('ANSIBLE');
+        $testcommand = $ansible . ' --version';
+        exec($testcommand,$output,$ret);
+        //print_r($output2);die;
+        if(strpos($output[0],'ansible') != 0) {
+            // $log['oper'] = '未找到ansible，请确认ansible安装是否正确！';
+            // M('oper_log')->add($log);
+            syslog(LOG_EMERG, '未找到ansible，请确认ansible安装是否正确！');
+            exit(1);
+        }        
         foreach ($list as $k => $v) {
-            $command2 = '/usr/local/bin/ansible ' . $v['ipaddr'] . ' -m ping';
+            $command2 = $ansible . ' ' . $v['ipaddr'] . ' -m ping';
             $output2 = array();
             exec($command2,$output2,$ret2);
             if(strpos($output2[2],'pong')){
@@ -19,7 +28,7 @@ class MonitorController extends Controller {
                     $condition['service_id'] = $l['service_id'];
                     $condition['host_id'] = $v['host_id'];
                     $condition['_logic']='AND';
-                    $command = '/usr/local/bin/ansible ' . $v['ipaddr'] . ' -m shell -a "/sbin/service ' . $l['service_name'] . ' status"';
+                    $command = $ansible . ' '  . $v['ipaddr'] . ' -m shell -a "/sbin/service ' . $l['service_name'] . ' status"';
                     $output = array();
                     exec($command,$output,$ret);
                     if(strpos($output[1],'is running')) {

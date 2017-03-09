@@ -19,9 +19,10 @@ class OperLogController extends CommonController {
     	//$this->assign('active',$this->active);
 
     	$log = D('OperLogView');
+        $user = D('UserRelation');
         $keyword = '';
         $condition = '';
-    	if(isset($_GET) && $_GET['keyword'] != '' ) {
+    	if(I('keyword') != '') {
             $condition['name']=array('like',I('keyword') . '%');
             $condition['source_ip']=array('like',I('keyword') . '%');
             $condition['_logic']='OR';
@@ -34,8 +35,13 @@ class OperLogController extends CommonController {
             $count = $log->count();
     	}
         
-    	
-    	$page = new \Lib\MyPage($count,10);
+    	$user_data['user_id'] = session(C('USER_AUTH_KEY'));
+        
+        $user_data['page'] = $_POST['page'] != '' ? $_POST['page'] : session('page');
+        if($user->save($user_data) !== false) {
+            session('page',$user_data['page']);
+        }       
+        $page = new \Lib\MyPage($count,session('page'));
 
     	//$page->parameter=I('get.');
     	//$page->setConfig('header','条数据');
@@ -64,7 +70,8 @@ class OperLogController extends CommonController {
         if($keyword != '') {
             $this->assign('keyword',$keyword);
         }
-    	
+        $this->assign('count',$count);
+        $this->assign('userPage',session('page'));     	
     
         //print_r($list);die;
     	$this->assign('level1',$this->level1);

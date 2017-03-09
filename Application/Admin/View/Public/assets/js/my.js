@@ -1005,3 +1005,46 @@ function serviceMgr(btid,host_id,service_id,action,service,service_home,ip){
 	    );
 	}
 }
+
+function changePage(pageSelect,keyword='') {
+	var page = pageSelect.options[pageSelect.selectedIndex].text;
+	$.post(
+    	//"/Admin/User/lists",
+    	window.location.pathname.substr('0',window.location.pathname.indexOf('lists') + 5),
+    	{
+    		page:page,
+    		keyword:keyword
+    	},
+    	function(data,status) {
+    		//alert(window.location.pathname.substr('0',window.location.pathname.indexOf('lists') + 5));
+    		if(keyword != '') {
+    			window.location.assign(window.location.pathname.substr('0',window.location.pathname.indexOf('lists') + 5) + '.html?keyword=' + keyword);
+    		}else {
+    			window.location.assign(window.location.pathname.substr('0',window.location.pathname.indexOf('lists') + 5) + '.html');
+    		}
+    		
+    	// 	if(status) {
+    	// 		//console.log(data);
+    	// 		if(data['ret'] == 'success') {
+    	// 		 	 $(btsel).html(text);
+    	// 		 	 $(btsel).attr({
+    	// 		 	 	"class":cssclass,
+    	// 		 	 	"onclick":click
+    	// 		 	});
+			 	// }else if(data['ret'] == 'failure'){
+			 	// 	alert('服务' + data['action'] + '失败');
+			 	// 	$(btsel).html(oldtext);
+			 	// }else if(data['ret'] == 'ansible-failure') {
+			 	// 	alert('未找到ansible-playbook，请确认ansible安装是否正确！');
+			 	// 	$(btsel).html(oldtext);
+			 	// }
+    	// 	}else{
+    	// 		alert('执行失败');
+			 	// $(btsel).html(oldtext);
+    	// 	}
+    	}
+    );	
+}
+
+
+

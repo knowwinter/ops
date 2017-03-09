@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source /home/admin/.bash_profile
+source ~/.bash_profile
 
 systemName=$1
 

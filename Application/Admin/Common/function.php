@@ -99,6 +99,55 @@ function getRandChar($length){
    }
 
    return $str;
-  }
+}
+
+function check_service($ip,$service){
+	$ansible = C('ANSIBLE');
+    $testcommand = $ansible . ' --version';
+    exec($testcommand,$output,$ret);
+    //print_r($output2);die;
+    $retstr = array();
+    if(strpos($output[0],'ansible') != 0) {
+        $retstr['code'] = '0';
+        $retstr['errmsg'] = '未找到ansible，请确认ansible安装是否正确！';
+    	return $retstr;
+    }
+    $command = $ansible . ' '  . $ip . ' -m shell -a "/sbin/service ' . $service . ' status"';
+	exec($command,$output2,$ret2);
+    if(strpos($output2[1],'is running')) {
+        $retstr['service_status'] = 1;
+    }else{
+        $retstr['service_status'] = 0;
+    }
+    $retstr['code'] = '1';
+    return $retstr;
+}
+
+function check_host($ip){
+	$ansible = C('ANSIBLE');
+    $testcommand = $ansible . ' --version';
+    exec($testcommand,$output,$ret);
+    //print_r($output2);die;
+    $retstr = array();
+    if(strpos($output[0],'ansible') != 0) {
+        $retstr['code'] = '0';
+        $retstr['errmsg'] = '未找到ansible，请确认ansible安装是否正确！';
+    	return $retstr;
+    }
+    $command = $ansible .  ' ' . $ip . ' -m ping';
+	exec($command,$output2,$ret2);
+    if(strpos($output2[2],'pong')) {
+        $retstr['status'] = 1;
+    }else{
+        $retstr['status'] = 0;
+    }
+    $retstr['code'] = '1';
+    return $retstr;
+}
+
+
+
+
+
 
  ?>

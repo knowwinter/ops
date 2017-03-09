@@ -19,9 +19,10 @@ class ProjectController extends CommonController {
     	$this->assign('active',$this->active);
 
     	$project = D('ProjectRelation');
+        $user = D('UserRelation');
         $keyword = '';
         $condition = '';
-    	if(isset($_GET) && $_GET['keyword'] != '' ) {
+    	if(I('keyword') != '') {
             $condition['project_name']=array('like',I('keyword') . '%');
             $condition['project_desc']=array('like',I('keyword') . '%');
             $condition['_logic']='OR';
@@ -34,8 +35,13 @@ class ProjectController extends CommonController {
             $count = $project->relation(true)->count();
     	}
         
-    	
-    	$page = new \Lib\MyPage($count,5);
+    	$user_data['user_id'] = session(C('USER_AUTH_KEY'));
+        
+        $user_data['page'] = $_POST['page'] != '' ? $_POST['page'] : session('page');
+        if($user->save($user_data) !== false) {
+            session('page',$user_data['page']);
+        }       
+        $page = new \Lib\MyPage($count,session('page'));
 
     	//$page->parameter=I('get.');
     	//$page->setConfig('header','条数据');
@@ -62,7 +68,9 @@ class ProjectController extends CommonController {
     	$this->assign('projectlist',$list);
     	$this->assign('page',$show);
     	$this->assign('keyword',$keyword);
-    
+        $this->assign('count',$count);
+        $this->assign('userPage',session('page'));        
+
         //print_r($list);die;
     	$this->assign('level1',$this->level1);
     	$this->assign('level2',$this->level2);

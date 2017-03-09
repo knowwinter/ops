@@ -19,9 +19,10 @@ class SystemController extends CommonController {
     	$this->assign('active',$this->active);
 
     	$system = D('SystemRelation');
+        $user = D('UserRelation');
         $keyword = '';
         $condition = '';
-    	if(isset($_GET) && $_GET['keyword'] != '' ) {
+    	if(I('keyword') != '') {
             $condition['system_name']=array('like',I('keyword') . '%');
             $condition['system_desc']=array('like',I('keyword') . '%');
             $condition['_logic']='OR';
@@ -33,9 +34,13 @@ class SystemController extends CommonController {
     		//$count = $system->where(array('system_name' => array('like',$keyword .'%' )) or array('name' => array('like',$keyword .'%' )))->group('system_id')->count();
             $count = $system->relation(true)->count();
     	}
-        
+        $user_data['user_id'] = session(C('USER_AUTH_KEY'));
+        $user_data['page'] = $_POST['page'] != '' ? $_POST['page'] : session('page');
+        if($user->save($user_data) !== false) {
+            session('page',$user_data['page']);
+        }               
     	
-    	$page = new \Lib\MyPage($count,5);
+    	$page = new \Lib\MyPage($count,session('page'));
 
     	//$page->parameter=I('get.');
     	//$page->setConfig('header','条数据');
@@ -62,6 +67,8 @@ class SystemController extends CommonController {
     	$this->assign('systemlist',$list);
     	$this->assign('page',$show);
     	$this->assign('keyword',$keyword);
+        $this->assign('count',$count);
+        $this->assign('userPage',session('page'));        
     
         //print_r($list);die;
     	$this->assign('level1',$this->level1);

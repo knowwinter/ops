@@ -10,5 +10,6 @@ return array(
 
     'ANSIBLE'				=>	'/Users/admin/anaconda2/bin/ansible',
     'ANSIBLE-PLAYBOOK'		=>	'/Users/admin/anaconda2/bin/ansible-playbook',
+    'version'				=>	'v1.0.2',
 
 );

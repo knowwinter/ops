@@ -22,8 +22,15 @@
 									</div> -->
 								</div>
 								<div class="panel-body">
-									
-								 <form id="search_form" method="get" action="{:U('Admin/OperLog/lists')}" class="pull-right mail-search">
+									<label class="control-label" for="system">合计：{$count} &nbsp;每页：</label>
+										
+									<select id="page" name="page" style="width:35px" size="1" onchange="changePage(this,'{$keyword}')">
+										<option value="10" {$userPage == '10' ? 'selected' : "" }>10</option>
+										<option value="20" {$userPage == '20' ? 'selected' : "" }>20</option>
+										<option value="50" {$userPage == '50' ? 'selected' : "" }>50</option>
+										<option value="100" {$userPage == '100' ? 'selected' : "" }>100</option>
+									</select>									
+								 <form id="search_form" method="post" action="{:U('Admin/OperLog/lists')}" class="pull-right mail-search">
 								 		<div class="input-group">
 													<input type="text" id="search_input" name="keyword" class="form-control" placeholder="关键字" value="{$keyword}"/>
 													<span class="input-group-btn">
